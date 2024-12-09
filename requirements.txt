@@ -1,2 +1,4 @@
 precommit
 pandas
+requests
+matplotlib
