@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nmdc_notebook_tools"
+version = "0.1.0"
+description = "A Python library for general research functions using NMDC APIs"
+authors = [
+    { name = "Olivia Hess", email = "olivia.hess@pnnl.gov" },
+]
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "requests",
+    "pandas",
+    "matplotlib",
+]
