@@ -17,7 +17,7 @@ def get_collection(
     all_pages: bool = False,
 ):
     """
-    Get a collection of data from the NMDC API.
+    Get a collection of data from the NMDC API. Generic function to get a collection of data from the NMDC API. Can provide a specific filter if desired.
     params:
         collection_name: str
             The name of the collection to query. Name examples can be found here https://microbiomedata.github.io/nmdc-schema/Database/
@@ -29,32 +29,49 @@ def get_collection(
             The fields to return. Default is all fields.
     """
     api_client = NMDClient()
-    results = []
+
     # if fields is empty, return all fields
     if not fields:
         fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
     url = f"{api_client.base_url}/nmdcschema/{collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}"
     # get the reponse
     response = requests.get(url)
+
     # check it came back with OK
-    if not all_pages:
+    if response.status_code != 200:
+        return (response.status_code, "There was an error.")
+
+    results = response.json()["resources"]
+    # otherwise, get all pages
+    if all_pages:
+        results = _get_all_pages(
+            response, collection_name, filter, max_page_size, fields
+        )
+    return results
+
+
+def _get_all_pages(
+    response: requests.models.Response,
+    collection_name: str,
+    filter: str = "",
+    max_page_size: int = 100,
+    fields: str = "",
+):
+    api_client = NMDClient()
+    while True:
+        if response.json().get("next_page_token"):
+            next_page_token = response.json()["next_page_token"]
+        else:
+            break
+        url = f"{api_client.base_url}/nmdcschema/{collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}&page_token={next_page_token}"
+        response = requests.get(url)
         if response.status_code == 200:
-            results = response.json()["resources"]
-            # return the dataframe
-            return convert_to_df(results)
+            # combine the previous api call json with the new one
+            results = {"resources": results["resources"] + response["resources"]}
+            next_page_token = response.json().get("next_page_token")
         else:
             return (response.status_code, "There was an error.")
-    else:
-        if response.get("next_page_token"):
-            next_page_token = response["next_page_token"]
-        while True:
-            url = f"{api_client.base_url}/nmdcschema/{collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}&page_token={next_page_token}"
-            response = requests.get(url)
-            if response.status_code == 200:
-                results.extend(response.json())
-                next_page_token = response.get("next_page_token")
-            else:
-                return (response.status_code, "There was an error.")
+    return results
 
 
 def get_collection_by_type(
@@ -65,7 +82,7 @@ def get_collection_by_type(
     all_pages: bool = False,
 ):
     """
-    Get a collection of data from the NMDC API.
+    Get a collection of data from the NMDC API. Specific function to get a collection of data from the NMDC API, filtered by data object type.
     params:
         collection_name: str
             The name of the collection to query. Name examples can be found here https://microbiomedata.github.io/nmdc-schema/Database/
@@ -81,31 +98,25 @@ def get_collection_by_type(
     results = []
     api_client = NMDClient()
     # create the filter based on data object type
-    filter = '{"data_object_type":{"$regex": "{data_object_type}"}}'
+    filter = '{"data_object_type":{"$regex": "{data_object_type}"}}'.format(
+        data_object_type=data_object_type
+    )
     # if fields is empty, return all fields
     if not fields:
         fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
     url = f"{api_client.base_url}/nmdcschema/{collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}"
     # get the reponse
     response = requests.get(url)
-    # if all_pages is False, return the first page
-    if not all_pages:
-        # check it came back with OK
-        if response.status_code == 200:
-            results = response.json()["resources"]
-            # return the dataframe
-            return convert_to_df(results)
-    else:
-        if response.get("next_page_token"):
-            next_page_token = response["next_page_token"]
-        while True:
-            url = f"{api_client.base_url}/nmdcschema/{collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}&page_token={next_page_token}"
-            response = requests.get(url)
-            if response.status_code == 200:
-                results.extend(response.json())
-                next_page_token = response.get("next_page_token")
-            else:
-                break
+    # check it came back with OK
+    if response.status_code != 200:
+        return (response.status_code, "There was an error.")
+
+    results = response.json()["resources"]
+    # otherwise, get all pages
+    if all_pages:
+        results = _get_all_pages(
+            response, collection_name, filter, max_page_size, fields
+        )
     return results
 
 
