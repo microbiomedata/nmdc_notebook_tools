@@ -42,8 +42,9 @@ def get_collection(
     if all_pages:
         results = _get_all_pages(
             response, collection_name, filter, max_page_size, fields
-        )
-    return results
+        )["resources"]
+
+    return convert_to_df(results)
 
 
 def _get_all_pages(
@@ -112,15 +113,15 @@ def get_collection_by_type(
     if all_pages:
         results = _get_all_pages(
             response, collection_name, filter, max_page_size, fields
-        )
-    return results
+        )["resources"]
+    return convert_to_df(results)
 
 
 def get_collection_by_id(
     collection_name: str, collection_id: str, max_page_size: int = 100, fields: str = ""
 ):
     """
-    Get a collection of data from the NMDC API. Specific function to get a collection of data from the NMDC API, filtered by data object type.
+    Get a collection of data from the NMDC API by id.
     params:
         collection_name: str
             The name of the collection to query. Name examples can be found here https://microbiomedata.github.io/nmdc-schema/Database/
@@ -146,7 +147,27 @@ def get_collection_by_id(
 
     results = response.json()["resources"]
 
-    return results
+    return convert_to_df(results)
+
+
+def get_collection_name_from_id(doc_id: str):
+    """
+    Determine the schema class by which the id belongs to.
+    params:
+        doc_id: str
+            The id of the document.
+    """
+    api_client = NMDClient()
+    url = f"{api_client.base_url}/nmdcschema/ids/{doc_id}/collection-name"
+    # get the reponse
+    response = requests.get(url)
+    # check it came back with OK
+    if response.status_code != 200:
+        return (response.status_code, "There was an error.")
+
+    collection_name = response.json()["collection_name"]
+
+    return collection_name
 
 
 def get_id_results(
@@ -192,18 +213,5 @@ def get_id_results(
     return next_results
 
 
-def get_study_id(self, study_name: str):
-    # Example function: Implement the actual endpoint call
-    pass
-
-
 if __name__ == "__main__":
-    nmdcapi = NMDClient()
-
-    processed_nom = get_collection(
-        collection_name="data_object_set",
-        filter='{"data_object_type":{"$regex": "FT ICR-MS Analysis Results"}}',
-        max_page_size=100,
-        fields="id,md5_checksum,url",
-        all_pages=True,
-    )
+    result = get_collection("data_object_set", all_pages=True)
