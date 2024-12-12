@@ -57,6 +57,7 @@ def _get_all_pages(
     max_page_size: int = 100,
     fields: str = "",
 ):
+    results = response.json()
     api_client = NMDClient()
     while True:
         if response.json().get("next_page_token"):
@@ -67,8 +68,7 @@ def _get_all_pages(
         response = requests.get(url)
         if response.status_code == 200:
             # combine the previous api call json with the new one
-            results = {"resources": results["resources"] + response["resources"]}
-            next_page_token = response.json().get("next_page_token")
+            results = {"resources": results["resources"] + response.json()["resources"]}
         else:
             return (response.status_code, "There was an error.")
     return results
@@ -170,7 +170,6 @@ def get_study_id(self, study_name: str):
 
 if __name__ == "__main__":
     nmdcapi = NMDClient()
-    from data_processing import convert_to_df
 
     processed_nom = get_collection(
         collection_name="data_object_set",
@@ -179,48 +178,3 @@ if __name__ == "__main__":
         fields="id,md5_checksum,url",
         all_pages=True,
     )
-
-    # clarify names
-    for dataobject in processed_nom:
-        dataobject["processed_nom_id"] = dataobject.pop("id")
-        dataobject["processed_nom_md5_checksum"] = dataobject.pop("md5_checksum")
-        dataobject["processed_nom_url"] = dataobject.pop("url")
-
-    # convert to df
-    processed_nom_df = convert_to_df(processed_nom)
-    processed_nom_df
-
-    newest_results = processed_nom
-    id_field = "processed_nom_id"
-    query_collection = "workflow_execution_set"
-    match_id_field = "has_output"
-    query_fields = "id,has_input,has_output"
-    # split old results into list
-    result_ids = get_id_list(newest_results, id_field)
-
-    # chunk up the results into sets of 100 using the split_list function and call the get_first_page_results function and append
-    # results to list
-    chunked_list = split_list(result_ids)
-    next_results = []
-    for chunk in chunked_list:
-        filter_string = string_mongo_list(chunk)
-        # quotes around match_id_field need to look a lot different for the final data object query
-        if "data_object_type" in match_id_field:
-            data = get_collection(
-                query_collection,
-                f'{{{match_id_field}: {{"$in": {filter_string}}}}}',
-                100,
-                query_fields,
-                all_pages=True,
-            )
-        else:
-            data = get_collection(
-                query_collection,
-                f'{{"{match_id_field}": {{"$in": {filter_string}}}}}',
-                100,
-                query_fields,
-                all_pages=True,
-            )
-        next_results.extend(data["resources"])
-
-    print(next_results)
