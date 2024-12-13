@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from api import NMDClient
 import requests
+import urllib.parse
 from data_processing import convert_to_df
 from utils import get_id_list, split_list, string_mongo_list
 
@@ -41,10 +42,13 @@ def find_study_by_attribute(attribute_name, attribute_value):
             The value of the attribute to filter by.
     """
     api_client = NMDClient()
-    filter = '{"{attribute_name}": {"$regex": "{attribute_value}"}}'.format(
-        attribute_name=attribute_name, attribute_value=attribute_value
-    )
-    url = f"{api_client.base_url}/studies?filter={filter}"
+
+    filter = f"{attribute_name}.search:{attribute_value}"
+
+    # Encode the filter for use in the URL
+    encoded_filter = urllib.parse.quote(filter)
+
+    url = f"{api_client.base_url}/studies?filter={encoded_filter}"
     # get the reponse
     response = requests.get(url)
     # check it came back with OK
