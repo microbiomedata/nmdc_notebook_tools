@@ -1,25 +1,41 @@
+exclude: .pre-commit-config.yaml
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
+      - id: fix-encoding-pragma
+      - id: trailing-whitespace
       - id: check-merge-conflict
       - id: end-of-file-fixer
+      - id: debug-statements
       - id: check-added-large-files
+      - id: check-ast
+      - id: check-byte-order-marker
       - id: check-case-conflict
-      - id: check-symlinks
+      - id: check-docstring-first
+      - id: check-json
+      - id: check-vcs-permalinks
       - id: mixed-line-ending
+      - id: name-tests-test
+      - id: pretty-format-json
+        args:
+          - --autofix
+          - --top-keys=_id
+      - id: sort-simple-yaml
+        files: '.yaml$'
+      - id: check-symlinks
       - id: check-yaml
         exclude: '(.*-ci|ci/.+)\.yml$'
       - id: detect-private-key
       - id: trailing-whitespace
-
-  - repo: https://github.com/psf/black
-    rev: 23.3.0
-    hooks:
-      - id: black
-
+      
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.3.1
     hooks:
       - id: remove-tabs
         exclude: '(\.tsv|Makefile)$'
+
+  - repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+      - id: black
