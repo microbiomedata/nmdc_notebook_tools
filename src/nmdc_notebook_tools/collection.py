@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import requests
 from data_processing import convert_to_df
-from utils import get_id_list, split_list, string_mongo_list
+
 from api import NMDClient
 
 
