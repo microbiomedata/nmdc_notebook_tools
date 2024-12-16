@@ -40,9 +40,9 @@ repos:
     hooks:
       - id: black
 
-  - repo: https://github.com/thclark/pre-commit-sphinx
-    rev: 0.0.1
-    hooks:
-      - id: build-docs
-        args: ['--cache-dir', 'docs/_build/doctrees', '--html-dir', 'docs/_build/html', '--source-dir', 'docs/source']
-        language_version: python3
+  # - repo: https://github.com/thclark/pre-commit-sphinx
+  #   rev: 0.0.1
+  #   hooks:
+  #     - id: build-docs
+  #       args: ['--cache-dir', 'docs/_build/doctrees', '--html-dir', 'docs/_build/html', '--source-dir', 'docs/source']
+  #       language_version: python3

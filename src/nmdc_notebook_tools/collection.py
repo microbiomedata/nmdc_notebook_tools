@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import requests
-from nmdc_notebook_tools.data_processing import DataProcessing
+from data_processing import DataProcessing
 
-from nmdc_notebook_tools.api import NMDClient
+from api import NMDClient
 
 
 class Collection:

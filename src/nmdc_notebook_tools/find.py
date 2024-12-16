@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from nmdc_notebook_tools.api import NMDClient
+from api import NMDClient
 import requests
 import urllib.parse
-from nmdc_notebook_tools.data_processing import DataProcessing
-from nmdc_notebook_tools.utils import Utils
+from data_processing import DataProcessing
+from utils import Utils
 
 
 class Find:
@@ -18,7 +18,7 @@ class Find:
                 The id of the study to query.
         """
         api_client = NMDClient()
-
+        dp = DataProcessing()
         url = f"{api_client.base_url}/study/{study_id}"
         # get the reponse
         response = requests.get(url)
@@ -27,7 +27,7 @@ class Find:
             return (response.status_code, "There was an error.")
         results = response.json()
 
-        return DataProcessing.convert_to_df(results)
+        return dp.convert_to_df(results)
 
     def find_study_by_attribute(self, attribute_name, attribute_value, page_size=25):
         """
@@ -43,7 +43,7 @@ class Find:
                 The number of results to return per page. Default is 25.
         """
         api_client = NMDClient()
-
+        dp = DataProcessing()
         filter = f"{attribute_name}.search:{attribute_value}"
 
         # Encode the filter for use in the URL
@@ -56,8 +56,12 @@ class Find:
         if response.status_code != 200:
             return (response.status_code, "There was an error.")
         results = response.json()["results"]
-        return DataProcessing.convert_to_df(results)
+        return dp.convert_to_df(results)
 
 
 if __name__ == "__main__":
-    Find.find_study_by_attribute("id", "nmdc:sty")
+    find = Find()
+    studies = find.find_study_by_attribute(
+        attribute_name="id", attribute_value="nmdc:sty"
+    )
+    print(studies)
