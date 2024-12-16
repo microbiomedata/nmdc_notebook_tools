@@ -162,6 +162,4 @@ cython_debug/
 #.idea/
 
 # Sphinx documentation
-docs/_build/
-docs/build/
-docs/source/_autosummary/
+nmdc_notebook_tools/src/nmdc_notebook_tools/docs/_build/
