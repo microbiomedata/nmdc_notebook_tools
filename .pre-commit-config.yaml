@@ -1,4 +1,4 @@
-exclude: .pre-commit-config.yaml
+exclude: '.pre-commit-config.yaml|.vscode/'
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
@@ -12,7 +12,6 @@ repos:
       - id: check-ast
       - id: check-byte-order-marker
       - id: check-case-conflict
-      - id: check-docstring-first
       - id: check-json
       - id: check-vcs-permalinks
       - id: mixed-line-ending
@@ -28,7 +27,7 @@ repos:
         exclude: '(.*-ci|ci/.+)\.yml$'
       - id: detect-private-key
       - id: trailing-whitespace
-      
+
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.3.1
     hooks:

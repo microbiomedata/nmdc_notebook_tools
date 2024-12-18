@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from collection import Collection
+from nmdc_notebook_tools.collection import Collection
 
 
 class Utils:

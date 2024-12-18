@@ -1,5 +1,5 @@
 NMDC Notebook Tools Documentation
-===============================
+=================================
 
 Welcome to NMDC Notebook Tools documentation. This package provides tools for interacting with the NMDC API.
 
@@ -7,16 +7,12 @@ Welcome to NMDC Notebook Tools documentation. This package provides tools for in
    :maxdepth: 2
    :caption: Contents:
 
-   installation
-   usage
-   api
-   modules
 
 Available Modules
-------------
+-----------------
 
 Collection
-~~~~
+~~~~~~~~~~
 
 .. autoclass:: nmdc_notebook_tools.collection.Collection
    :members:
@@ -32,7 +28,7 @@ Find
    :show-inheritance:
 
 Data Processing
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
 .. autoclass:: nmdc_notebook_tools.data_processing.DataProcessing
    :members:

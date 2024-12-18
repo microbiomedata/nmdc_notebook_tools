@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import requests
-from data_processing import DataProcessing
+from nmdc_notebook_tools.data_processing import DataProcessing
 
-from api import NMDClient
+from nmdc_notebook_tools.api import NMDClient
 
 
 class Collection:
@@ -30,7 +30,7 @@ class Collection:
                 The fields to return. Default is all fields.
         """
         api_client = NMDClient()
-
+        dp = DataProcessing()
         # if fields is empty, return all fields
         if not fields:
             fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
@@ -49,7 +49,7 @@ class Collection:
                 response, collection_name, filter, max_page_size, fields
             )["resources"]
 
-        return DataProcessing.convert_to_df(results)
+        return dp.convert_to_df(results)
 
     def _get_all_pages(
         self,
@@ -101,6 +101,7 @@ class Collection:
         """
         results = []
         api_client = NMDClient()
+        dp = DataProcessing()
         # create the filter based on data object type
         filter = '{"data_object_type":{"$regex": "{data_object_type}"}}'.format(
             data_object_type=data_object_type
@@ -121,7 +122,7 @@ class Collection:
             results = self._get_all_pages(
                 response, collection_name, filter, max_page_size, fields
             )["resources"]
-        return DataProcessing.convert_to_df(results)
+        return dp.convert_to_df(results)
 
     def get_collection_by_id(
         self,
@@ -144,7 +145,7 @@ class Collection:
         """
         results = []
         api_client = NMDClient()
-
+        dp = DataProcessing()
         # if fields is empty, return all fields
         if not fields:
             fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
@@ -157,7 +158,7 @@ class Collection:
 
         results = response.json()["resources"]
 
-        return DataProcessing.convert_to_df(results)
+        return dp.convert_to_df(results)
 
     def get_collection_name_from_id(self, doc_id: str):
         """
@@ -180,4 +181,5 @@ class Collection:
 
 
 if __name__ == "__main__":
-    pass
+    get_collection = Collection()
+    get_collection.get_collection("Database")

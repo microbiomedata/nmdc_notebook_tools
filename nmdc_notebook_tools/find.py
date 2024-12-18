@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from api import NMDClient
+from nmdc_notebook_tools.api import NMDClient
 import requests
 import urllib.parse
 from typing import List, Dict
 import json
-from data_processing import DataProcessing
-from utils import Utils
+from nmdc_notebook_tools.data_processing import DataProcessing
+from nmdc_notebook_tools.utils import Utils
 
 
 class Find:
