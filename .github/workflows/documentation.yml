@@ -14,9 +14,11 @@ jobs:
       - name: Install dependencies
         run: |
           pip install sphinx sphinx_rtd_theme myst_parser
+          pip install -e .
+          pip install -r requirements.txt
       - name: Sphinx build
         run: |
-          sphinx-build docs build/html
+          sphinx-build -v docs build/html
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
