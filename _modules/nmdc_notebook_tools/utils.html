@@ -1,0 +1,182 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>nmdc_notebook_tools.utils &mdash; nmdc_notebook_tools 3/1/2025 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=1e0eaa87"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            nmdc_notebook_tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">nmdc_notebook_tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">nmdc_notebook_tools.utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for nmdc_notebook_tools.utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">nmdc_notebook_tools.collection</span> <span class="kn">import</span> <span class="n">Collection</span>
+
+
+<div class="viewcode-block" id="Utils">
+<a class="viewcode-back" href="../../source/nmdc_notebook_tools.html#nmdc_notebook_tools.utils.Utils">[docs]</a>
+<span class="k">class</span> <span class="nc">Utils</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Utils.string_mongo_list">
+<a class="viewcode-back" href="../../source/nmdc_notebook_tools.html#nmdc_notebook_tools.utils.Utils.string_mongo_list">[docs]</a>
+    <span class="k">def</span> <span class="nf">string_mongo_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert elements in a list to use double quotes instead of single quotes.</span>
+<span class="sd">        This is required for mongo queries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Utils.split_list">
+<a class="viewcode-back" href="../../source/nmdc_notebook_tools.html#nmdc_notebook_tools.utils.Utils.split_list">[docs]</a>
+    <span class="k">def</span> <span class="nf">split_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">chunk_size</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">chunk_size</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="Utils.get_id_list">
+<a class="viewcode-back" href="../../source/nmdc_notebook_tools.html#nmdc_notebook_tools.utils.Utils.get_id_list">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_id_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">id_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a list of ids from an api call response json.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="n">id_name</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Utils.get_id_results">
+<a class="viewcode-back" href="../../source/nmdc_notebook_tools.html#nmdc_notebook_tools.utils.Utils.get_id_results">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_id_results</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">newest_results</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">id_field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">query_collection</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">match_id_field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">query_fields</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the results from a query collection based on the ids from the newest results.</span>
+<span class="sd">        params:</span>
+<span class="sd">            newest_results: list</span>
+<span class="sd">                The results from the most recent query.</span>
+<span class="sd">            id_field: str</span>
+<span class="sd">                The field in the newest results that contains the ids.</span>
+<span class="sd">            query_collection: str</span>
+<span class="sd">                The collection to query.</span>
+<span class="sd">            match_id_field: str</span>
+<span class="sd">                The field in the query collection that matches the id_field.</span>
+<span class="sd">            query_fields: str</span>
+<span class="sd">                The fields to return in the query.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Extract IDs and split them into chunks</span>
+        <span class="n">result_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_id_list</span><span class="p">(</span><span class="n">newest_results</span><span class="p">,</span> <span class="n">id_field</span><span class="p">)</span>
+        <span class="n">chunked_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_list</span><span class="p">(</span><span class="n">result_ids</span><span class="p">)</span>
+
+        <span class="c1"># Function to construct the appropriate filter string</span>
+        <span class="k">def</span> <span class="nf">construct_filter_string</span><span class="p">(</span><span class="n">chunk</span><span class="p">):</span>
+            <span class="n">filter_string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">string_mongo_list</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;data_object_type&quot;</span> <span class="ow">in</span> <span class="n">match_id_field</span><span class="p">:</span>
+                <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">{{</span><span class="si">{</span><span class="n">match_id_field</span><span class="si">}</span><span class="s1">: </span><span class="se">{{</span><span class="s1">&quot;$in&quot;: </span><span class="si">{</span><span class="n">filter_string</span><span class="si">}</span><span class="se">}}}}</span><span class="s1">&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">{{</span><span class="s1">&quot;</span><span class="si">{</span><span class="n">match_id_field</span><span class="si">}</span><span class="s1">&quot;: </span><span class="se">{{</span><span class="s1">&quot;$in&quot;: </span><span class="si">{</span><span class="n">filter_string</span><span class="si">}</span><span class="se">}}}}</span><span class="s1">&#39;</span>
+
+        <span class="c1"># Retrieve and collect results</span>
+        <span class="n">next_results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunked_list</span><span class="p">:</span>
+            <span class="n">filter_str</span> <span class="o">=</span> <span class="n">construct_filter_string</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">Collection</span><span class="o">.</span><span class="n">get_collection</span><span class="p">(</span>
+                <span class="n">query_collection</span><span class="p">,</span> <span class="n">filter_str</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">query_fields</span>
+            <span class="p">)</span>
+            <span class="n">next_results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;resources&quot;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">next_results</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Olivia Hess.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
