@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+nmdc_notebook_tools/__pycache__/
 *.py[cod]
 *$py.class
 
