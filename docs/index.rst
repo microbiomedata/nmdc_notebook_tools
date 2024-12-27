@@ -19,10 +19,18 @@ Collection
    :undoc-members:
    :show-inheritance:
 
-Find
+Study
 ~~~~
 
-.. autoclass:: nmdc_notebook_tools.find.Find
+.. autoclass:: nmdc_notebook_tools.study.Study
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Biosample
+~~~~
+
+.. autoclass:: nmdc_notebook_tools.biosample.Biosample
    :members:
    :undoc-members:
    :show-inheritance:
