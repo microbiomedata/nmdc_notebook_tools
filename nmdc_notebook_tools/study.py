@@ -104,6 +104,23 @@ class Study:
         results = response.json()["results"]
         return results
 
+    def get_study_data_objects(self, study_id: str) -> List[Dict]:
+        """
+        Get the data objects associated with a study.
+        params:
+            study_id: str
+                The id of the study to query.
+        """
+        api_client = NMDClient()
+        url = f"{api_client.base_url}/data_objects/studies/{study_id}"
+        # get the reponse
+        response = requests.get(url)
+        # check it came back with OK
+        if response.status_code != 200:
+            return (response.status_code, "There was an error.")
+        results = response.json()["results"]
+        return results
+
 
 if __name__ == "__main__":
     pass
