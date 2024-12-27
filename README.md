@@ -15,3 +15,6 @@ I would recommend periodically runnning `git pull` to get the latest updates.
 
 # Installation
 Note: nmdc_notebook_tools will eventually be available at `pip install nmdc_notebook_tools` but is still in development.
+
+# Documentation
+Documentation about available functions and helpful usage notes can be found at https://microbiomedata.github.io/nmdc_notebook_tools/.
