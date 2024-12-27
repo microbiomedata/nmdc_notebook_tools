@@ -12,7 +12,7 @@ class Find:
     def __init__(self):
         pass
 
-    def find_study_by_id(self, study_id: str) -> List[Dict]:
+    def find_study_by_id(self, study_id: str) -> Dict:
         """
         Get a study from the NMDC API by its id.
         params:
@@ -21,13 +21,13 @@ class Find:
         """
         api_client = NMDClient()
         dp = DataProcessing()
-        url = f"{api_client.base_url}/study/{study_id}"
+        url = f"{api_client.base_url}/studies/{study_id}"
         # get the reponse
         response = requests.get(url)
         # check it came back with OK
         if response.status_code != 200:
-            return (response.status_code, "There was an error.")
-        results = response.json()["results"]
+            return (response.status_code, "There was an error: " + response.text)
+        results = response.json()
         return results
 
     def find_study_by_attribute(
