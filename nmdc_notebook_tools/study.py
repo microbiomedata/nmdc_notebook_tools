@@ -3,12 +3,11 @@ from nmdc_notebook_tools.api import NMDClient
 import requests
 import urllib.parse
 from typing import List, Dict
-import json
 from nmdc_notebook_tools.data_processing import DataProcessing
 from nmdc_notebook_tools.utils import Utils
 
 
-class Find:
+class Study:
     def __init__(self):
         pass
 
@@ -51,7 +50,7 @@ class Find:
         # Encode the filter for use in the URL
         encoded_filter = urllib.parse.quote(filter)
 
-        url = f"{api_client.base_url}/studies?filter={encoded_filter}&page_size={page_size}"
+        url = f"{api_client.base_url}/studies?filter={encoded_filter}&per_page={page_size}"
         # get the reponse
         response = requests.get(url)
         # check it came back with OK
@@ -96,7 +95,24 @@ class Find:
         api_client = NMDClient()
         filter = f"principal_investigator.has_raw_value.search:{pi_name}"
 
-        url = f"{api_client.base_url}/studies?filter={filter}&page_size={page_size}"
+        url = f"{api_client.base_url}/studies?filter={filter}&per_page={page_size}"
+        # get the reponse
+        response = requests.get(url)
+        # check it came back with OK
+        if response.status_code != 200:
+            return (response.status_code, "There was an error.")
+        results = response.json()["results"]
+        return results
+
+    def get_study_data_objects(self, study_id: str) -> List[Dict]:
+        """
+        Get the data objects associated with a study.
+        params:
+            study_id: str
+                The id of the study to query.
+        """
+        api_client = NMDClient()
+        url = f"{api_client.base_url}/data_objects/studies/{study_id}"
         # get the reponse
         response = requests.get(url)
         # check it came back with OK
@@ -106,8 +122,5 @@ class Find:
         return results
 
 
-# function to filter the list of dicts?
-# can we project on study endpoint as well?
-
 if __name__ == "__main__":
-    find = Find()
+    pass
