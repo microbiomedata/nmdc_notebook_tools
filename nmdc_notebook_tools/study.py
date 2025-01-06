@@ -71,7 +71,7 @@ class Study:
                 The number of results to return per page. Default is 25.
         """
         api_client = NMDClient()
-
+        filter = urllib.parse.quote_plus(filter)
         url = (
             f"{api_client.base_url}/studies?&filter={filter}&max_page_size={page_size}"
         )

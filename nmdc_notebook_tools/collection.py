@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import requests
 from nmdc_notebook_tools.data_processing import DataProcessing
-
+import urllib.parse
 from nmdc_notebook_tools.api import NMDClient
 
 
@@ -34,10 +34,10 @@ class Collection:
         # if fields is empty, return all fields
         if not fields:
             fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
+        filter = urllib.parse.quote_plus(filter)
         url = f"{api_client.base_url}/nmdcschema/{collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}"
         # get the reponse
         response = requests.get(url)
-
         # check it came back with OK
         if response.status_code != 200:
             return (response.status_code, "There was an error.")
@@ -77,9 +77,8 @@ class Collection:
                 return (response.status_code, "There was an error.")
         return results
 
-    def get_collection_by_type(
+    def get_collection_data_object_by_type(
         self,
-        collection_name: str,
         data_object_type: str = "",
         max_page_size: int = 100,
         fields: str = "",
@@ -88,8 +87,6 @@ class Collection:
         """
         Get a collection of data from the NMDC API. Specific function to get a collection of data from the NMDC API, filtered by data object type.
         params:
-            collection_name: str
-                The name of the collection to query. Name examples can be found here https://microbiomedata.github.io/nmdc-schema/Database/
             data_object_type: str
                 The data_object_type to filter by. Default is an empty string, which will return all data.
             max_page_size: int
@@ -103,13 +100,12 @@ class Collection:
         api_client = NMDClient()
         dp = DataProcessing()
         # create the filter based on data object type
-        filter = '{"data_object_type":{"$regex": "{data_object_type}"}}'.format(
-            data_object_type=data_object_type
-        )
+        filter = f'{{"data_object_type":{{"$regex": "{data_object_type}"}}}}'
+        filter = urllib.parse.quote_plus(filter)
         # if fields is empty, return all fields
         if not fields:
             fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
-        url = f"{api_client.base_url}/nmdcschema/{collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}"
+        url = f"{api_client.base_url}/nmdcschema/data_object_set?filter={filter}&page_size={max_page_size}&projection={fields}"
         # get the reponse
         response = requests.get(url)
         # check it came back with OK
@@ -120,7 +116,7 @@ class Collection:
         # otherwise, get all pages
         if all_pages:
             results = self._get_all_pages(
-                response, collection_name, filter, max_page_size, fields
+                response, "data_object_set", filter, max_page_size, fields
             )["resources"]
         return dp.convert_to_df(results)
 
@@ -182,4 +178,5 @@ class Collection:
 
 if __name__ == "__main__":
     get_collection = Collection()
-    get_collection.get_collection("Database")
+    fr = get_collection.get_collection_by_type("biosample_set", "nmdc:bsm-11-002vgm56")
+    print(fr)
