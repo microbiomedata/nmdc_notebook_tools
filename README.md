@@ -13,6 +13,15 @@ collection_client.get_collection_by_id("biosample", "id")
 ```
 I would recommend periodically runnning `git pull` to get the latest updates.
 
+## Logging - Debug Mode
+To see debugging information, include these two lines where ever you are running the functions:
+```python
+import logging
+logging.basicConfig(level=logging.DEBUG)
+# when this is run, you will see debug information in the console.
+collection_client.get_collection_by_id("biosample", "id")
+```
+
 # Installation
 Note: nmdc_notebook_tools will eventually be available at `pip install nmdc_notebook_tools` but is still in development.
 

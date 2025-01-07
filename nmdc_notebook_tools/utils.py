@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from nmdc_notebook_tools.collection import Collection
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Utils:

@@ -5,6 +5,9 @@ import urllib.parse
 from typing import List, Dict
 from nmdc_notebook_tools.data_processing import DataProcessing
 from nmdc_notebook_tools.utils import Utils
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Study:
@@ -22,10 +25,16 @@ class Study:
         dp = DataProcessing()
         url = f"{api_client.base_url}/studies/{study_id}"
         # get the reponse
-        response = requests.get(url)
-        # check it came back with OK
-        if response.status_code != 200:
-            return (response.status_code, "There was an error: " + response.text)
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get study by id from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
         results = response.json()
         return results
 
@@ -48,11 +57,16 @@ class Study:
         filter = urllib.parse.quote_plus(f"{attribute_name}.search:{attribute_value}")
 
         url = f"{api_client.base_url}/studies?filter={filter}&per_page={page_size}"
-        # get the reponse
-        response = requests.get(url)
-        # check it came back with OK
-        if response.status_code != 200:
-            return (response.status_code, "There was an error.")
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get study from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
         results = response.json()["results"]
         return results
 
@@ -72,11 +86,16 @@ class Study:
         url = (
             f"{api_client.base_url}/studies?&filter={filter}&max_page_size={page_size}"
         )
-        # get the reponse
-        response = requests.get(url)
-        # check it came back with OK
-        if response.status_code != 200:
-            return (response.status_code, "There was an error.")
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get study from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
         results = response.json()["results"]
         return results
 
@@ -94,11 +113,16 @@ class Study:
             f"principal_investigator.has_raw_value.search:{pi_name}"
         )
         url = f"{api_client.base_url}/studies?filter={filter}&per_page={page_size}"
-        # get the reponse
-        response = requests.get(url)
-        # check it came back with OK
-        if response.status_code != 200:
-            return (response.status_code, "There was an error.")
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get study by pi from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
         results = response.json()["results"]
         return results
 
@@ -111,11 +135,16 @@ class Study:
         """
         api_client = NMDClient()
         url = f"{api_client.base_url}/data_objects/studies/{study_id}"
-        # get the reponse
-        response = requests.get(url)
-        # check it came back with OK
-        if response.status_code != 200:
-            return (response.status_code, "There was an error.")
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get study data objects from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
         results = response.json()["results"]
         return results
 

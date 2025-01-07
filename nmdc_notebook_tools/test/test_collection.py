@@ -9,7 +9,7 @@ def test_get_collection():
     assert len(results) > 0
 
 
-def test_get_collection_by_type():
+def test_get_collection_data_object_by_type():
     collection = Collection()
     results = collection.get_collection_data_object_by_type(
         "data_object_set", "nmdc:bsm-11-002vgm56"

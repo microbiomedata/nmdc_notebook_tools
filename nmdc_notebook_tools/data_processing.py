@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class DataProcessing:
