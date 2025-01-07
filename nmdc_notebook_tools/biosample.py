@@ -58,6 +58,7 @@ class Biosample:
                 The number of results to return per page. Default is 25.
         """
         api_client = NMDClient()
+        filter = urllib.parse.quote_plus(filter)
         url = f"{api_client.base_url}/biosamples?filter={filter}&per_page={page_size}"
         # get the reponse
         response = requests.get(url)
@@ -83,12 +84,9 @@ class Biosample:
                 The number of results to return per page. Default is 25.
         """
         api_client = NMDClient()
-        filter = f"{attribute_name}.search:{attribute_value}"
+        filter = urllib.parse.quote_plus(f"{attribute_name}.search:{attribute_value}")
 
-        # Encode the filter for use in the URL
-        encoded_filter = urllib.parse.quote(filter)
-
-        url = f"{api_client.base_url}/biosamples?filter={encoded_filter}&per_page={page_size}"
+        url = f"{api_client.base_url}/biosamples?filter={filter}&per_page={page_size}"
         # get the reponse
         response = requests.get(url)
         # check it came back with OK
