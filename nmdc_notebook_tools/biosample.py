@@ -5,6 +5,7 @@ import urllib.parse
 from typing import List, Dict
 from nmdc_notebook_tools.data_processing import DataProcessing
 import logging
+from nmdc_notebook_tools.utils import Utils
 
 logger = logging.getLogger(__name__)
 
@@ -13,11 +14,16 @@ class Biosample:
     def __init__(self):
         pass
 
-    def get_all_biosamples(self, page_size=25) -> List[Dict]:
+    def get_all_biosamples(
+        self, fields="", all_pages=False, page_size=25
+    ) -> List[Dict]:
         """
-        TODO
         Get all biosamples from the NMDC API.
         params:
+            fields: str
+                The fields to return. Default is all fields.
+            all_pages: bool
+                Whether or not to return all pages of results. Default is False.
             page_size: int
                 The number of results to return per page. Default is 25.
         returns:
@@ -26,7 +32,7 @@ class Biosample:
             RuntimeError: An error is raised if the API request fails.
         """
         api_client = NMDClient()
-        url = f"{api_client.base_url}/biosamples?per_page={page_size}"
+        url = f"{api_client.base_url}/nmdcschema/biosample_set?max_page_size={page_size}&projection={fields}"
         # get the reponse
         try:
             response = requests.get(url)
@@ -38,10 +44,17 @@ class Biosample:
             logging.debug(
                 f"API request response: {response.json()}\n API Status Code: {response.status_code}"
             )
+        # otherwise, get all pages
+        if all_pages:
+            ut = Utils()
+            results = ut.get_all_pages(
+                response, "biosample_set", filter, page_size, fields
+            )["resources"]
+
         results = response.json()["results"]
         return results
 
-    def find_biosample_by_id(self, sample_id: str) -> Dict:
+    def biosample_by_id(self, sample_id: str) -> Dict:
         """
         Get a biosample from the NMDC API by its id.
         params:
@@ -49,7 +62,8 @@ class Biosample:
                 The id of the biosample to query.
         """
         api_client = NMDClient()
-        url = f"{api_client.base_url}/biosamples/{sample_id}"
+        filter = urllib.parse.quote_plus(f'{{"id":"{sample_id}"}}')
+        url = f"{api_client.base_url}/nmdcschema/biosample_set/?filter={filter}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -60,24 +74,23 @@ class Biosample:
             logging.debug(
                 f"API request response: {response.json()}\n API Status Code: {response.status_code}"
             )
-        results = response.json()
+        results = response.json()["resources"]
         return results
 
-    def find_biosample_by_filter(self, filter: str, page_size=25) -> Dict:
+    def biosample_by_filter(self, filter: str, page_size=25) -> Dict:
         """
         Get a biosample from the NMDC API by its id.
         params:
-            sample_id: str
-                The id of the biosample to query.
             filter: str
-                The filter to use to query the biosample.
-                Example: id:my_id, name:my_sample, description:my_description
+                The filter to use to query the biosample. Must be in MonogDB query format.
+                    Resources found here - https://www.mongodb.com/docs/manual/reference/method/db.collection.find/#std-label-method-find-query
+                Example: {"name":{"my biosample name"}}
             page_size: int
                 The number of results to return per page. Default is 25.
         """
         api_client = NMDClient()
         filter = urllib.parse.quote_plus(filter)
-        url = f"{api_client.base_url}/biosamples?filter={filter}&per_page={page_size}"
+        url = f"{api_client.base_url}/nmdcschema/biosample_set/?filter={filter}&per_page={page_size}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -88,17 +101,15 @@ class Biosample:
             logging.debug(
                 f"API request response: {response.json()}\n API Status Code: {response.status_code}"
             )
-        results = response.json()
+        results = response.json()["resources"]
         return results
 
-    def find_biosample_by_attribute(
+    def biosample_by_attribute(
         self, attribute_name, attribute_value, page_size=25
     ) -> List[Dict]:
         """
         Get a biosample from the NMDC API by its name. Biosamples can be filtered based on their attributes found https://microbiomedata.github.io/nmdc-schema/Biosample/.
         params:
-            sample_name: str
-                The name of the biosample to query.
             attribute_name: str
                 The name of the attribute to filter by.
             attribute_value: str
@@ -107,9 +118,11 @@ class Biosample:
                 The number of results to return per page. Default is 25.
         """
         api_client = NMDClient()
-        filter = urllib.parse.quote_plus(f"{attribute_name}.search:{attribute_value}")
+        filter = f'{{"{attribute_name}": "{attribute_value}"}}'
+        print(filter)
+        filter = urllib.parse.quote_plus(filter)
 
-        url = f"{api_client.base_url}/biosamples?filter={filter}&per_page={page_size}"
+        url = f"{api_client.base_url}/nmdcschema/biosample_set?filter={filter}&per_page={page_size}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -120,7 +133,7 @@ class Biosample:
             logging.debug(
                 f"API request response: {response.json()}\n API Status Code: {response.status_code}"
             )
-        results = response.json()["results"]
+        results = response.json()["resources"]
         return results
 
 

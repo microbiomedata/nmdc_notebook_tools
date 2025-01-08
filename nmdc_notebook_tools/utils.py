@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from nmdc_notebook_tools.collection import Collection
+import requests
+from nmdc_notebook_tools.api import NMDClient
 import logging
 
 logger = logging.getLogger(__name__)
@@ -70,3 +72,46 @@ class Utils:
             next_results.extend(data["resources"])
 
         return next_results
+
+    def get_all_pages(
+        self,
+        response: requests.models.Response,
+        collection_name: str,
+        filter: str = "",
+        max_page_size: int = 100,
+        fields: str = "",
+    ):
+        """
+        Get all pages of results from an API request.
+        params:
+            response: requests.models.Response
+                The response object from an API request.
+            collection_name: str
+                The name of the collection to get results from.
+            filter: str
+                The filter to apply to the request. Default is an empty string.
+            max_page_size: int
+                The maximum number of results to return per page. Default is 100.
+            fields: str
+                The fields to return in the response. Default is an empty string.
+        """
+        results = response.json()
+        api_client = NMDClient()
+        while True:
+            if response.json().get("next_page_token"):
+                next_page_token = response.json()["next_page_token"]
+            else:
+                break
+            url = f"{api_client.base_url}/nmdcschema/{collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}&page_token={next_page_token}"
+            try:
+                response = requests.get(url)
+                response.raise_for_status()
+            except requests.exceptions.RequestException as e:
+                logger.error("API request failed", exc_info=True)
+                raise RuntimeError("Failed to get collection from NMDC API") from e
+            else:
+                logging.debug(
+                    f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+                )
+            results = {"resources": results["resources"] + response.json()["resources"]}
+        return results
