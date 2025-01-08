@@ -4,6 +4,9 @@ import requests
 import urllib.parse
 from typing import List, Dict
 from nmdc_notebook_tools.data_processing import DataProcessing
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Biosample:
@@ -17,14 +20,24 @@ class Biosample:
         params:
             page_size: int
                 The number of results to return per page. Default is 25.
+        returns:
+            List[Dict]: A list of biosamples.
+        Raises:
+            RuntimeError: An error is raised if the API request fails.
         """
         api_client = NMDClient()
         url = f"{api_client.base_url}/biosamples?per_page={page_size}"
         # get the reponse
-        response = requests.get(url)
-        # check it came back with OK
-        if response.status_code != 200:
-            return (response.status_code, "There was an error: " + response.text)
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get biosamples from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
         results = response.json()["results"]
         return results
 
@@ -37,11 +50,16 @@ class Biosample:
         """
         api_client = NMDClient()
         url = f"{api_client.base_url}/biosamples/{sample_id}"
-        # get the reponse
-        response = requests.get(url)
-        # check it came back with OK
-        if response.status_code != 200:
-            return (response.status_code, "There was an error: " + response.text)
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get biosample from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
         results = response.json()
         return results
 
@@ -60,11 +78,16 @@ class Biosample:
         api_client = NMDClient()
         filter = urllib.parse.quote_plus(filter)
         url = f"{api_client.base_url}/biosamples?filter={filter}&per_page={page_size}"
-        # get the reponse
-        response = requests.get(url)
-        # check it came back with OK
-        if response.status_code != 200:
-            return (response.status_code, "There was an error: " + response.text)
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get biosample(s) from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
         results = response.json()
         return results
 
@@ -87,11 +110,16 @@ class Biosample:
         filter = urllib.parse.quote_plus(f"{attribute_name}.search:{attribute_value}")
 
         url = f"{api_client.base_url}/biosamples?filter={filter}&per_page={page_size}"
-        # get the reponse
-        response = requests.get(url)
-        # check it came back with OK
-        if response.status_code != 200:
-            return (response.status_code, "There was an error.")
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get biosample from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
         results = response.json()["results"]
         return results
 

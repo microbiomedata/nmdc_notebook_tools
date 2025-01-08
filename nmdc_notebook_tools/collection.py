@@ -3,6 +3,9 @@ import requests
 from nmdc_notebook_tools.data_processing import DataProcessing
 import urllib.parse
 from nmdc_notebook_tools.api import NMDClient
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Collection:
@@ -36,11 +39,16 @@ class Collection:
             fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
         filter = urllib.parse.quote_plus(filter)
         url = f"{api_client.base_url}/nmdcschema/{collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}"
-        # get the reponse
-        response = requests.get(url)
-        # check it came back with OK
-        if response.status_code != 200:
-            return (response.status_code, "There was an error.")
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get collection from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
 
         results = response.json()["resources"]
         # otherwise, get all pages
@@ -67,14 +75,17 @@ class Collection:
             else:
                 break
             url = f"{api_client.base_url}/nmdcschema/{collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}&page_token={next_page_token}"
-            response = requests.get(url)
-            if response.status_code == 200:
-                # combine the previous api call json with the new one
-                results = {
-                    "resources": results["resources"] + response.json()["resources"]
-                }
+            try:
+                response = requests.get(url)
+                response.raise_for_status()
+            except requests.exceptions.RequestException as e:
+                logger.error("API request failed", exc_info=True)
+                raise RuntimeError("Failed to get collection from NMDC API") from e
             else:
-                return (response.status_code, "There was an error.")
+                logging.debug(
+                    f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+                )
+            results = {"resources": results["resources"] + response.json()["resources"]}
         return results
 
     def get_collection_data_object_by_type(
@@ -107,11 +118,16 @@ class Collection:
             fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
         url = f"{api_client.base_url}/nmdcschema/data_object_set?filter={filter}&page_size={max_page_size}&projection={fields}"
         # get the reponse
-        response = requests.get(url)
-        # check it came back with OK
-        if response.status_code != 200:
-            return (response.status_code, "There was an error.")
-
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get data object from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
         results = response.json()["resources"]
         # otherwise, get all pages
         if all_pages:
@@ -147,10 +163,16 @@ class Collection:
             fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
         url = f"{api_client.base_url}/nmdcschema/{collection_name}/{collection_id}?page_size={max_page_size}&projection={fields}"
         # get the reponse
-        response = requests.get(url)
-        # check it came back with OK
-        if response.status_code != 200:
-            return (response.status_code, "There was an error.")
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get collection by id from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
 
         results = response.json()["resources"]
 
@@ -165,11 +187,16 @@ class Collection:
         """
         api_client = NMDClient()
         url = f"{api_client.base_url}/nmdcschema/ids/{doc_id}/collection-name"
-        # get the reponse
-        response = requests.get(url)
-        # check it came back with OK
-        if response.status_code != 200:
-            return (response.status_code, "There was an error.")
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get biosample from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
 
         collection_name = response.json()["collection_name"]
 
@@ -177,6 +204,4 @@ class Collection:
 
 
 if __name__ == "__main__":
-    get_collection = Collection()
-    fr = get_collection.get_collection_by_type("biosample_set", "nmdc:bsm-11-002vgm56")
-    print(fr)
+    pass

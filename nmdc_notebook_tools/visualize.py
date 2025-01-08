@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 import pandas as pd
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def plot(
