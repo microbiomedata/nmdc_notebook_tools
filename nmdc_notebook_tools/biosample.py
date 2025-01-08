@@ -136,6 +136,146 @@ class Biosample:
         results = response.json()["resources"]
         return results
 
+    def biosample_by_latitude(self, comparison: str, latitude: float):
+        """
+        Get a biosample from the NMDC API by latitude comparison.
+        params:
+            comparison: str
+                The comparison to use to query the biosample. MUST BE ONE OF THE FOLLOWING:
+                    eq    - Matches values that are equal to the given value.
+                    gt    - Matches if values are greater than the given value.
+                    lt    - Matches if values are less than the given value.
+                    gte    - Matches if values are greater or equal to the given value.
+                    lte - Matches if values are less or equal to the given value.
+            latitude: float
+                The latitude of the biosample to query.
+        """
+        allowed_comparisons = ["eq", "gt", "lt", "gte", "lte"]
+        if comparison not in allowed_comparisons:
+            logger.error(
+                f"Invalid comparison input: {comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+            raise ValueError(
+                f"Invalid comparison input: {comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+        api_client = NMDClient()
+        filter = f'{{"lat_lon.latitude": {{"${comparison}": {latitude}}}}}'
+        filter = urllib.parse.quote_plus(filter)
+        url = f"{api_client.base_url}/nmdcschema/biosample_set/?filter={filter}"
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get biosample from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
+        return response.json()["resources"]
+
+    def biosample_by_longitude(self, comparison: str, longitude: float):
+        """
+        Get a biosample from the NMDC API by longitude comparison.
+        params:
+            comparison: str
+                The comparison to use to query the biosample. MUST BE ONE OF THE FOLLOWING:
+                    eq    - Matches values that are equal to the given value.
+                    gt    - Matches if values are greater than the given value.
+                    lt    - Matches if values are less than the given value.
+                    gte    - Matches if values are greater or equal to the given value.
+                    lte - Matches if values are less or equal to the given value.
+            longitude: float
+                The longitude of the biosample to query.
+        """
+        allowed_comparisons = ["eq", "gt", "lt", "gte", "lte"]
+        if comparison not in allowed_comparisons:
+            logger.error(
+                f"Invalid comparison input: {comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+            raise ValueError(
+                f"Invalid comparison input: {comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+        api_client = NMDClient()
+        filter = f'{{"lat_lon.longitude": {{"${comparison}": {longitude}}}}}'
+        filter = urllib.parse.quote_plus(filter)
+        url = f"{api_client.base_url}/nmdcschema/biosample_set/?filter={filter}"
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get biosample from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
+        return response.json()["resources"]
+
+    def biosample_by_lat_long(
+        self,
+        lat_comparison: str,
+        long_comparison: str,
+        latitude: float,
+        longitude: float,
+        page_size=25,
+    ) -> List[Dict]:
+        """
+        Get a biosample from the NMDC API by latitude and longitude comparison.
+        params:
+            lat_comparison: str
+                The comparison to use to query the biosample for latitude. MUST BE ONE OF THE FOLLOWING:
+                    eq    - Matches values that are equal to the given value.
+                    gt    - Matches if values are greater than the given value.
+                    lt    - Matches if values are less than the given value.
+                    gte    - Matches if values are greater or equal to the given value.
+                    lte - Matches if values are less or equal to the given value.
+            long_comparison: str
+                The comparison to use to query the biosample for longitude. MUST BE ONE OF THE FOLLOWING:
+                    eq    - Matches values that are equal to the given value.
+                    gt    - Matches if values are greater than the given value.
+                    lt    - Matches if values are less than the given value.
+                    gte    - Matches if values are greater or equal to the given value.
+                    lte - Matches if values are less or equal to the given value.
+            latitude: float
+                The latitude of the biosample to query.
+            longitude: float
+                The longitude of the biosample to query.
+            page_size: int
+                The number of results to return per page. Default is 25.
+        """
+        allowed_comparisons = ["eq", "gt", "lt", "gte", "lte"]
+        if lat_comparison not in allowed_comparisons:
+            logger.error(
+                f"Invalid comparison input: {lat_comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+            raise ValueError(
+                f"Invalid comparison input: {lat_comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+        if long_comparison not in allowed_comparisons:
+            logger.error(
+                f"Invalid comparison input: {long_comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+            raise ValueError(
+                f"Invalid comparison input: {long_comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+        api_client = NMDClient()
+        filter = f'{{"lat_lon.latitude": {{"${lat_comparison}": {latitude}}}, "lat_lon.longitude": {{"${long_comparison}": {longitude}}}}}'
+        filter = urllib.parse.quote_plus(filter)
+        url = f"{api_client.base_url}/nmdcschema/biosample_set/?filter={filter}&per_page={page_size}"
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get biosample from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
+        results = response.json()["resources"]
+        return results
+
 
 if __name__ == "__main__":
     pass
