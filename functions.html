@@ -1,0 +1,512 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NMDC Notebook Tools Documentation &mdash; nmdc_notebook_tools 3/1/2025 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=1e0eaa87"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="NMDC Notebook Tools Usage Notes" href="usage.html" />
+    <link rel="prev" title="NMDC Notebook Tools Documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            nmdc_notebook_tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">NMDC Notebook Tools Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#collection">Collection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nmdc_notebook_tools.collection.Collection"><code class="docutils literal notranslate"><span class="pre">Collection</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.collection.Collection.get_collection"><code class="docutils literal notranslate"><span class="pre">Collection.get_collection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.collection.Collection.get_collection_by_id"><code class="docutils literal notranslate"><span class="pre">Collection.get_collection_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.collection.Collection.get_collection_data_object_by_type"><code class="docutils literal notranslate"><span class="pre">Collection.get_collection_data_object_by_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.collection.Collection.get_collection_name_from_id"><code class="docutils literal notranslate"><span class="pre">Collection.get_collection_name_from_id()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#study">Study</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nmdc_notebook_tools.study.Study"><code class="docutils literal notranslate"><span class="pre">Study</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.study.Study.find_study_by_attribute"><code class="docutils literal notranslate"><span class="pre">Study.find_study_by_attribute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.study.Study.find_study_by_filter"><code class="docutils literal notranslate"><span class="pre">Study.find_study_by_filter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.study.Study.find_study_by_id"><code class="docutils literal notranslate"><span class="pre">Study.find_study_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.study.Study.find_study_by_pi"><code class="docutils literal notranslate"><span class="pre">Study.find_study_by_pi()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.study.Study.get_study_data_objects"><code class="docutils literal notranslate"><span class="pre">Study.get_study_data_objects()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#biosample">Biosample</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nmdc_notebook_tools.biosample.Biosample"><code class="docutils literal notranslate"><span class="pre">Biosample</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.biosample.Biosample.find_biosample_by_attribute"><code class="docutils literal notranslate"><span class="pre">Biosample.find_biosample_by_attribute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.biosample.Biosample.find_biosample_by_filter"><code class="docutils literal notranslate"><span class="pre">Biosample.find_biosample_by_filter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.biosample.Biosample.find_biosample_by_id"><code class="docutils literal notranslate"><span class="pre">Biosample.find_biosample_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.biosample.Biosample.get_all_biosamples"><code class="docutils literal notranslate"><span class="pre">Biosample.get_all_biosamples()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-processing">Data Processing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nmdc_notebook_tools.data_processing.DataProcessing"><code class="docutils literal notranslate"><span class="pre">DataProcessing</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.data_processing.DataProcessing.convert_to_df"><code class="docutils literal notranslate"><span class="pre">DataProcessing.convert_to_df()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.data_processing.DataProcessing.merge_dataframes"><code class="docutils literal notranslate"><span class="pre">DataProcessing.merge_dataframes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.data_processing.DataProcessing.merge_df"><code class="docutils literal notranslate"><span class="pre">DataProcessing.merge_df()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.data_processing.DataProcessing.rename_columns"><code class="docutils literal notranslate"><span class="pre">DataProcessing.rename_columns()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utils">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nmdc_notebook_tools.utils.Utils"><code class="docutils literal notranslate"><span class="pre">Utils</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.utils.Utils.get_id_list"><code class="docutils literal notranslate"><span class="pre">Utils.get_id_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.utils.Utils.get_id_results"><code class="docutils literal notranslate"><span class="pre">Utils.get_id_results()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.utils.Utils.split_list"><code class="docutils literal notranslate"><span class="pre">Utils.split_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmdc_notebook_tools.utils.Utils.string_mongo_list"><code class="docutils literal notranslate"><span class="pre">Utils.string_mongo_list()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">NMDC Notebook Tools Usage Notes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">nmdc_notebook_tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">NMDC Notebook Tools Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="nmdc-notebook-tools-documentation">
+<h1>NMDC Notebook Tools Documentation<a class="headerlink" href="#nmdc-notebook-tools-documentation" title="Link to this heading"></a></h1>
+<p>Welcome to NMDC Notebook Tools documentation. This package provides tools for interacting with the NMDC API. Below are the available modules.</p>
+<section id="collection">
+<h2>Collection<a class="headerlink" href="#collection" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.collection.Collection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nmdc_notebook_tools.collection.</span></span><span class="sig-name descname"><span class="pre">Collection</span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/collection.html#Collection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.collection.Collection" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.collection.Collection.get_collection">
+<span class="sig-name descname"><span class="pre">get_collection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_page_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_pages</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmdc_notebook_tools/collection.html#Collection.get_collection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.collection.Collection.get_collection" title="Link to this definition"></a></dt>
+<dd><p>Get a collection of data from the NMDC API. Generic function to get a collection of data from the NMDC API. Can provide a specific filter if desired.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>collection_name: str</dt><dd><p>The name of the collection to query. Name examples can be found here <a class="reference external" href="https://microbiomedata.github.io/nmdc-schema/Database/">https://microbiomedata.github.io/nmdc-schema/Database/</a></p>
+</dd>
+<dt>filter: str</dt><dd><p>The filter to apply to the query. Default is an empty string.</p>
+</dd>
+<dt>max_page_size: int</dt><dd><p>The maximum number of items to return per page. Default is 100.</p>
+</dd>
+<dt>fields: str</dt><dd><p>The fields to return. Default is all fields.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.collection.Collection.get_collection_by_id">
+<span class="sig-name descname"><span class="pre">get_collection_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_page_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmdc_notebook_tools/collection.html#Collection.get_collection_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.collection.Collection.get_collection_by_id" title="Link to this definition"></a></dt>
+<dd><p>Get a collection of data from the NMDC API by id.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>collection_name: str</dt><dd><p>The name of the collection to query. Name examples can be found here <a class="reference external" href="https://microbiomedata.github.io/nmdc-schema/Database/">https://microbiomedata.github.io/nmdc-schema/Database/</a></p>
+</dd>
+<dt>collection_id: str</dt><dd><p>The id of the collection.</p>
+</dd>
+<dt>max_page_size: int</dt><dd><p>The maximum number of items to return per page. Default is 100.</p>
+</dd>
+<dt>fields: str</dt><dd><p>The fields to return. Default is all fields.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.collection.Collection.get_collection_data_object_by_type">
+<span class="sig-name descname"><span class="pre">get_collection_data_object_by_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_object_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_page_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_pages</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmdc_notebook_tools/collection.html#Collection.get_collection_data_object_by_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.collection.Collection.get_collection_data_object_by_type" title="Link to this definition"></a></dt>
+<dd><p>Get a collection of data from the NMDC API. Specific function to get a collection of data from the NMDC API, filtered by data object type.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>data_object_type: str</dt><dd><p>The data_object_type to filter by. Default is an empty string, which will return all data.</p>
+</dd>
+<dt>max_page_size: int</dt><dd><p>The maximum number of items to return per page. Default is 100.</p>
+</dd>
+<dt>fields: str</dt><dd><p>The fields to return. Default is all fields.</p>
+</dd>
+<dt>pages: bool</dt><dd><p>True to return all pages. False to return the first page. Default is False.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.collection.Collection.get_collection_name_from_id">
+<span class="sig-name descname"><span class="pre">get_collection_name_from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmdc_notebook_tools/collection.html#Collection.get_collection_name_from_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.collection.Collection.get_collection_name_from_id" title="Link to this definition"></a></dt>
+<dd><p>Determine the schema class by which the id belongs to.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>doc_id: str</dt><dd><p>The id of the document.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="study">
+<h2>Study<a class="headerlink" href="#study" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.study.Study">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nmdc_notebook_tools.study.</span></span><span class="sig-name descname"><span class="pre">Study</span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/study.html#Study"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.study.Study" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.study.Study.find_study_by_attribute">
+<span class="sig-name descname"><span class="pre">find_study_by_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/study.html#Study.find_study_by_attribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.study.Study.find_study_by_attribute" title="Link to this definition"></a></dt>
+<dd><p>Get a study from the NMDC API by its name. Studies can be filtered based on their attributes found <a class="reference external" href="https://microbiomedata.github.io/nmdc-schema/Study/">https://microbiomedata.github.io/nmdc-schema/Study/</a>.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>study_name: str</dt><dd><p>The name of the study to query.</p>
+</dd>
+<dt>attribute_name: str</dt><dd><p>The name of the attribute to filter by.</p>
+</dd>
+<dt>attribute_value: str</dt><dd><p>The value of the attribute to filter by.</p>
+</dd>
+<dt>page_size: int</dt><dd><p>The number of results to return per page. Default is 25.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.study.Study.find_study_by_filter">
+<span class="sig-name descname"><span class="pre">find_study_by_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/study.html#Study.find_study_by_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.study.Study.find_study_by_filter" title="Link to this definition"></a></dt>
+<dd><p>Get a study from the NMDC API by its name. Studies can be filtered based on their attributes found <a class="reference external" href="https://microbiomedata.github.io/nmdc-schema/Study/">https://microbiomedata.github.io/nmdc-schema/Study/</a>.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>filter: str</dt><dd><p>The filter to use to query the studies.
+Example: id:my_id, name:my_study, description:my_description</p>
+</dd>
+<dt>page_size: int</dt><dd><p>The number of results to return per page. Default is 25.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.study.Study.find_study_by_id">
+<span class="sig-name descname"><span class="pre">find_study_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">study_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/study.html#Study.find_study_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.study.Study.find_study_by_id" title="Link to this definition"></a></dt>
+<dd><p>Get a study from the NMDC API by its id.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>study_id: str</dt><dd><p>The id of the study to query.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.study.Study.find_study_by_pi">
+<span class="sig-name descname"><span class="pre">find_study_by_pi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pi_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/study.html#Study.find_study_by_pi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.study.Study.find_study_by_pi" title="Link to this definition"></a></dt>
+<dd><p>Get a study from the NMDC API by its name. Studies can be filtered based on their attributes found <a class="reference external" href="https://microbiomedata.github.io/nmdc-schema/Study/">https://microbiomedata.github.io/nmdc-schema/Study/</a>.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>pi_name: str</dt><dd><p>The name of the PI to filter by.</p>
+</dd>
+<dt>page_size: int</dt><dd><p>The number of results to return per page. Default is 25.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.study.Study.get_study_data_objects">
+<span class="sig-name descname"><span class="pre">get_study_data_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">study_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/study.html#Study.get_study_data_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.study.Study.get_study_data_objects" title="Link to this definition"></a></dt>
+<dd><p>Get the data objects associated with a study.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>study_id: str</dt><dd><p>The id of the study to query.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="biosample">
+<h2>Biosample<a class="headerlink" href="#biosample" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.biosample.Biosample">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nmdc_notebook_tools.biosample.</span></span><span class="sig-name descname"><span class="pre">Biosample</span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/biosample.html#Biosample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.biosample.Biosample" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.biosample.Biosample.find_biosample_by_attribute">
+<span class="sig-name descname"><span class="pre">find_biosample_by_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/biosample.html#Biosample.find_biosample_by_attribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.biosample.Biosample.find_biosample_by_attribute" title="Link to this definition"></a></dt>
+<dd><p>Get a biosample from the NMDC API by its name. Biosamples can be filtered based on their attributes found <a class="reference external" href="https://microbiomedata.github.io/nmdc-schema/Biosample/">https://microbiomedata.github.io/nmdc-schema/Biosample/</a>.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>sample_name: str</dt><dd><p>The name of the biosample to query.</p>
+</dd>
+<dt>attribute_name: str</dt><dd><p>The name of the attribute to filter by.</p>
+</dd>
+<dt>attribute_value: str</dt><dd><p>The value of the attribute to filter by.</p>
+</dd>
+<dt>page_size: int</dt><dd><p>The number of results to return per page. Default is 25.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.biosample.Biosample.find_biosample_by_filter">
+<span class="sig-name descname"><span class="pre">find_biosample_by_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/biosample.html#Biosample.find_biosample_by_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.biosample.Biosample.find_biosample_by_filter" title="Link to this definition"></a></dt>
+<dd><p>Get a biosample from the NMDC API by its id.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>sample_id: str</dt><dd><p>The id of the biosample to query.</p>
+</dd>
+<dt>filter: str</dt><dd><p>The filter to use to query the biosample.
+Example: id:my_id, name:my_sample, description:my_description</p>
+</dd>
+<dt>page_size: int</dt><dd><p>The number of results to return per page. Default is 25.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.biosample.Biosample.find_biosample_by_id">
+<span class="sig-name descname"><span class="pre">find_biosample_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/biosample.html#Biosample.find_biosample_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.biosample.Biosample.find_biosample_by_id" title="Link to this definition"></a></dt>
+<dd><p>Get a biosample from the NMDC API by its id.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>sample_id: str</dt><dd><p>The id of the biosample to query.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.biosample.Biosample.get_all_biosamples">
+<span class="sig-name descname"><span class="pre">get_all_biosamples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/biosample.html#Biosample.get_all_biosamples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.biosample.Biosample.get_all_biosamples" title="Link to this definition"></a></dt>
+<dd><p>TODO
+Get all biosamples from the NMDC API.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>page_size: int</dt><dd><p>The number of results to return per page. Default is 25.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of biosamples.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[Dict]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – An error is raised if the API request fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="data-processing">
+<h2>Data Processing<a class="headerlink" href="#data-processing" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.data_processing.DataProcessing">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nmdc_notebook_tools.data_processing.</span></span><span class="sig-name descname"><span class="pre">DataProcessing</span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/data_processing.html#DataProcessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.data_processing.DataProcessing" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.data_processing.DataProcessing.convert_to_df">
+<span class="sig-name descname"><span class="pre">convert_to_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/data_processing.html#DataProcessing.convert_to_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.data_processing.DataProcessing.convert_to_df" title="Link to this definition"></a></dt>
+<dd><p>Convert a list of dictionaries to a pandas dataframe.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>data: list</dt><dd><p>A list of dictionaries.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.data_processing.DataProcessing.merge_dataframes">
+<span class="sig-name descname"><span class="pre">merge_dataframes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/data_processing.html#DataProcessing.merge_dataframes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.data_processing.DataProcessing.merge_dataframes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.data_processing.DataProcessing.merge_df">
+<span class="sig-name descname"><span class="pre">merge_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df1_explode_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df2_explode_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmdc_notebook_tools/data_processing.html#DataProcessing.merge_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.data_processing.DataProcessing.merge_df" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.data_processing.DataProcessing.rename_columns">
+<span class="sig-name descname"><span class="pre">rename_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_col_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/data_processing.html#DataProcessing.rename_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.data_processing.DataProcessing.rename_columns" title="Link to this definition"></a></dt>
+<dd><p>Rename columns in a pandas dataframe.
+params:</p>
+<blockquote>
+<div><dl>
+<dt>df: pd.DataFrame</dt><dd><p>The pandas dataframe to rename columns.</p>
+</dd>
+<dt>new_col_names: list</dt><dd><p>A list of new column names. Names MUST be in order of the columns in the dataframe.</p>
+<dl class="simple">
+<dt>Example:</dt><dd><p>If the current column names are - [‘old_col1’, ‘old_col2’, ‘old_col3’]
+You will need to pass in the new names like - [‘new_col1’, ‘new_col2’, ‘new_col3’]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="utils">
+<h2>Utils<a class="headerlink" href="#utils" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.utils.Utils">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nmdc_notebook_tools.utils.</span></span><span class="sig-name descname"><span class="pre">Utils</span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/utils.html#Utils"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.utils.Utils" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.utils.Utils.get_id_list">
+<span class="sig-name descname"><span class="pre">get_id_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/utils.html#Utils.get_id_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.utils.Utils.get_id_list" title="Link to this definition"></a></dt>
+<dd><p>Get a list of ids from an api call response json.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.utils.Utils.get_id_results">
+<span class="sig-name descname"><span class="pre">get_id_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newest_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_field</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_collection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_id_field</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/utils.html#Utils.get_id_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.utils.Utils.get_id_results" title="Link to this definition"></a></dt>
+<dd><p>Get the results from a query collection based on the ids from the newest results.
+params:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>newest_results: list</dt><dd><p>The results from the most recent query.</p>
+</dd>
+<dt>id_field: str</dt><dd><p>The field in the newest results that contains the ids.</p>
+</dd>
+<dt>query_collection: str</dt><dd><p>The collection to query.</p>
+</dd>
+<dt>match_id_field: str</dt><dd><p>The field in the query collection that matches the id_field.</p>
+</dd>
+<dt>query_fields: str</dt><dd><p>The fields to return in the query.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.utils.Utils.split_list">
+<span class="sig-name descname"><span class="pre">split_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/utils.html#Utils.split_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.utils.Utils.split_list" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nmdc_notebook_tools.utils.Utils.string_mongo_list">
+<span class="sig-name descname"><span class="pre">string_mongo_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/nmdc_notebook_tools/utils.html#Utils.string_mongo_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmdc_notebook_tools.utils.Utils.string_mongo_list" title="Link to this definition"></a></dt>
+<dd><p>Convert elements in a list to use double quotes instead of single quotes.
+This is required for mongo queries.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="NMDC Notebook Tools Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="usage.html" class="btn btn-neutral float-right" title="NMDC Notebook Tools Usage Notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Olivia Hess.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
