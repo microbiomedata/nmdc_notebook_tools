@@ -14,5 +14,10 @@ def test_find_study_by_attribute():
 def test_find_study_by_filter():
     st = Study()
     stu = st.study_by_filter(
-        '{"name":"Deep subsurface shale carbon reservoir microbial communities from Ohio and West Virginia"}'
+        '{"name":"Lab enrichment of tropical soil microbial communities from Luquillo Experimental Forest, Puerto Rico"}'
+    )
+    assert len(stu) > 0
+    assert (
+        stu[0]["name"]
+        == "Lab enrichment of tropical soil microbial communities from Luquillo Experimental Forest, Puerto Rico"
     )
