@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from nmdc_notebook_tools.biosample import Biosample
 import logging
+from nmdc_notebook_tools.utils import Utils
 
 
 def test_find_biosample_by_id():
@@ -51,3 +52,21 @@ def test_biosample_by_lat_long():
     assert len(results) > 0
     assert results[0]["lat_lon"]["latitude"] == 63.875088
     assert results[0]["lat_lon"]["longitude"] == -149.210438
+
+
+def test_biosample_build_filter_1():
+    u = Utils()
+    b = Biosample()
+    filter = u.build_filter({"name": "G6R2_NF_20JUN2016"})
+    results = b.biosample_by_filter(filter)
+    print(results)
+    assert len(results) > 0
+
+
+def test_biosample_build_filter_2():
+    u = Utils()
+    b = Biosample()
+    filter = u.build_filter({"name": "G6R2_NF_20JUN2016", "id": "nmdc:bsm-11-006pnx90"})
+    results = b.biosample_by_filter(filter)
+    print(results)
+    assert len(results) < 0

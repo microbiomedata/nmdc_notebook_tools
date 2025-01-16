@@ -115,3 +115,20 @@ class Utils:
                 )
             results = {"resources": results["resources"] + response.json()["resources"]}
         return results
+
+    def build_filter(self, attributes):
+        """
+        Create a MongoDB filter using $regex for each attribute in the input dictionary. For nested attributes, use dot notation.
+
+        Parameters:
+        attributes (dict): Dictionary of attribute names and their corresponding values to match using regex.
+            Example: {"name": "example", "description": "example", "geo_loc_name": "example"}
+        Returns:
+        dict: A MongoDB filter dictionary.
+        """
+        filter_dict = {}
+        for attribute_name, attribute_value in attributes.items():
+            filter_dict[attribute_name] = {"$regex": attribute_value}
+
+        print(self.string_mongo_list(filter_dict))
+        return self.string_mongo_list(filter_dict)
