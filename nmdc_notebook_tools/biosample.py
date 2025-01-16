@@ -122,7 +122,7 @@ class Biosample:
                 The number of results to return per page. Default is 25.
         """
         api_client = NMDClient()
-        filter = f'{{"{attribute_name}": "{attribute_value}"}}'
+        filter = f'{{"{attribute_name}":{{"$regex":"{attribute_value}"}}}}'
         filter = urllib.parse.quote_plus(filter)
         url = f"{api_client.base_url}/nmdcschema/biosample_set?filter={filter}&per_page={page_size}"
         try:

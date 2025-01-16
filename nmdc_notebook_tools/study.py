@@ -57,9 +57,10 @@ class Study:
 
         """
         api_client = NMDClient()
-        filter = f'{{"{attribute_name}": "{attribute_value}"}}'
+        filter = f'{{"{attribute_name}":{{"$regex":"{attribute_value}"}}}}'
         filter = urllib.parse.quote_plus(filter)
-        url = f"{api_client.base_url}/nmdcschema/study_set?filter={filter}&per_page={page_size}&projection={fields}"
+        print(filter)
+        url = f"{api_client.base_url}/nmdcschema/study_set/?filter={filter}&per_page={page_size}&projection={fields}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -71,6 +72,7 @@ class Study:
                 f"API request response: {response.json()}\n API Status Code: {response.status_code}"
             )
         results = response.json()["resources"]
+        print(results)
         return results
 
     def study_by_filter(self, filter, page_size=25, fields="") -> List[Dict]:
