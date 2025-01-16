@@ -4,6 +4,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class NMDClient:
+class NMDCSearch:
     def __init__(self):
         self.base_url = "https://api.microbiomedata.org"

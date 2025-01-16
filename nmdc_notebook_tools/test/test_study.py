@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from nmdc_notebook_tools.study import Study
+from nmdc_notebook_tools.study_search import StudySearch
 
 
 def test_find_study_by_attribute():
-    st = Study()
+    st = StudySearch()
     stu = st.study_by_attribute(
         "name",
         "Lab enrichment of tropical soil microbial communities from Luquillo Experimental Forest, Puerto Rico",
@@ -12,7 +12,7 @@ def test_find_study_by_attribute():
 
 
 def test_find_study_by_filter():
-    st = Study()
+    st = StudySearch()
     stu = st.study_by_filter(
         '{"name":"Lab enrichment of tropical soil microbial communities from Luquillo Experimental Forest, Puerto Rico"}'
     )

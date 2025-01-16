@@ -2,23 +2,22 @@
 import requests
 from nmdc_notebook_tools.data_processing import DataProcessing
 import urllib.parse
-from nmdc_notebook_tools.api import NMDClient
+from nmdc_notebook_tools.nmdc_search import NMDCSearch
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-class Collection:
+class CollectionSearch:
     """
     Class to interact with the NMDC API to get collections of data. Must know the collection name to query.
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, collection_name):
+        self.collection_name = collection_name
 
     def get_collection(
         self,
-        collection_name: str,
         filter: str = "",
         max_page_size: int = 100,
         fields: str = "",
@@ -27,8 +26,6 @@ class Collection:
         """
         Get a collection of data from the NMDC API. Generic function to get a collection of data from the NMDC API. Can provide a specific filter if desired.
         params:
-            collection_name: str
-                The name of the collection to query. Name examples can be found here https://microbiomedata.github.io/nmdc-schema/Database/
             filter: str
                 The filter to apply to the query. Default is an empty string.
             max_page_size: int
@@ -36,13 +33,13 @@ class Collection:
             fields: str
                 The fields to return. Default is all fields.
         """
-        api_client = NMDClient()
+        api_client = NMDCSearch()
         dp = DataProcessing()
         # if fields is empty, return all fields
         if not fields:
             fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
         filter = urllib.parse.quote_plus(filter)
-        url = f"{api_client.base_url}/nmdcschema/{collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}"
+        url = f"{api_client.base_url}/nmdcschema/{self.collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -58,7 +55,7 @@ class Collection:
         # otherwise, get all pages
         if all_pages:
             results = self._get_all_pages(
-                response, collection_name, filter, max_page_size, fields
+                response, self.collection_name, filter, max_page_size, fields
             )["resources"]
 
         return dp.convert_to_df(results)
@@ -66,19 +63,18 @@ class Collection:
     def _get_all_pages(
         self,
         response: requests.models.Response,
-        collection_name: str,
         filter: str = "",
         max_page_size: int = 100,
         fields: str = "",
     ):
         results = response.json()
-        api_client = NMDClient()
+        api_client = NMDCSearch()
         while True:
             if response.json().get("next_page_token"):
                 next_page_token = response.json()["next_page_token"]
             else:
                 break
-            url = f"{api_client.base_url}/nmdcschema/{collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}&page_token={next_page_token}"
+            url = f"{api_client.base_url}/nmdcschema/{self.collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}&page_token={next_page_token}"
             try:
                 response = requests.get(url)
                 response.raise_for_status()
@@ -112,7 +108,7 @@ class Collection:
                 True to return all pages. False to return the first page. Default is False.
         """
         results = []
-        api_client = NMDClient()
+        api_client = NMDCSearch()
         dp = DataProcessing()
         # create the filter based on data object type
         filter = f'{{"data_object_type":{{"$regex": "{data_object_type}"}}}}'
@@ -142,7 +138,6 @@ class Collection:
 
     def get_collection_by_id(
         self,
-        collection_name: str,
         collection_id: str,
         max_page_size: int = 100,
         fields: str = "",
@@ -150,8 +145,6 @@ class Collection:
         """
         Get a collection of data from the NMDC API by id.
         params:
-            collection_name: str
-                The name of the collection to query. Name examples can be found here https://microbiomedata.github.io/nmdc-schema/Database/
             collection_id: str
                 The id of the collection.
             max_page_size: int
@@ -160,12 +153,12 @@ class Collection:
                 The fields to return. Default is all fields.
         """
         results = []
-        api_client = NMDClient()
+        api_client = NMDCSearch()
         dp = DataProcessing()
         # if fields is empty, return all fields
         if not fields:
             fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
-        url = f"{api_client.base_url}/nmdcschema/{collection_name}/{collection_id}?page_size={max_page_size}&projection={fields}"
+        url = f"{api_client.base_url}/nmdcschema/{self.collection_name}/{collection_id}?page_size={max_page_size}&projection={fields}"
         # get the reponse
         try:
             response = requests.get(url)
@@ -186,11 +179,12 @@ class Collection:
         """
         Used when you have an id but not the collection name.
         Determine the schema class by which the id belongs to.
+        Sets the collection_name attribute.
         params:
             doc_id: str
                 The id of the document.
         """
-        api_client = NMDClient()
+        api_client = NMDCSearch()
         url = f"{api_client.base_url}/nmdcschema/ids/{doc_id}/collection-name"
         try:
             response = requests.get(url)
@@ -204,7 +198,7 @@ class Collection:
             )
 
         collection_name = response.json()["collection_name"]
-
+        self.collection_name = collection_name
         return collection_name
 
 

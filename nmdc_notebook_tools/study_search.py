@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from nmdc_notebook_tools.api import NMDClient
+from nmdc_notebook_tools.nmdc_search import NMDCSearch
 import requests
 import urllib.parse
 from typing import List, Dict
@@ -10,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class Study:
+class StudySearch:
     def __init__(self):
         pass
 
@@ -21,7 +21,7 @@ class Study:
             study_id: str
                 The id of the study to query.
         """
-        api_client = NMDClient()
+        api_client = NMDCSearch()
         url = f"{api_client.base_url}/nmdcschema/study_set/{study_id}"
         # get the reponse
         try:
@@ -56,7 +56,7 @@ class Study:
                     Example: "id,name,description"
 
         """
-        api_client = NMDClient()
+        api_client = NMDCSearch()
         filter = f'{{"{attribute_name}":{{"$regex":"{attribute_value}"}}}}'
         filter = urllib.parse.quote_plus(filter)
         print(filter)
@@ -88,7 +88,7 @@ class Study:
                 Specify fields to return in the response in a comma separated list. Default is all fields.
                     Example: "id,name,description"
         """
-        api_client = NMDClient()
+        api_client = NMDCSearch()
         filter = urllib.parse.quote_plus(filter)
         url = f"{api_client.base_url}/nmdcschema/study_set/?&filter={filter}&max_page_size={page_size}&projection={fields}"
         try:
@@ -116,7 +116,7 @@ class Study:
                 Specify fields to return in the response in a comma separated list. Default is all fields.
                     Example: "id,name,description"
         """
-        api_client = NMDClient()
+        api_client = NMDCSearch()
         filter = urllib.parse.quote_plus(
             f'{{"principal_investigator.has_raw_value": {pi_name}}}'
         )
@@ -141,7 +141,7 @@ class Study:
             study_id: str
                 The id of the study to query.
         """
-        api_client = NMDClient()
+        api_client = NMDCSearch()
         url = f"{api_client.base_url}/data_objects/studies/{study_id}"
         try:
             response = requests.get(url)

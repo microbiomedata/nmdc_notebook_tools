@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from nmdc_notebook_tools.collection import Collection
+from nmdc_notebook_tools.collection_search import CollectionSearch
 import requests
-from nmdc_notebook_tools.api import NMDClient
+from nmdc_notebook_tools.nmdc_search import NMDCSearch
 import logging
 
 logger = logging.getLogger(__name__)
@@ -66,7 +66,7 @@ class Utils:
         next_results = []
         for chunk in chunked_list:
             filter_str = construct_filter_string(chunk)
-            data = Collection.get_collection(
+            data = CollectionSearch.get_collection(
                 query_collection, filter_str, 100, query_fields
             )
             next_results.extend(data["resources"])
@@ -96,7 +96,7 @@ class Utils:
                 The fields to return in the response. Default is an empty string.
         """
         results = response.json()
-        api_client = NMDClient()
+        api_client = NMDCSearch()
         while True:
             if response.json().get("next_page_token"):
                 next_page_token = response.json()["next_page_token"]

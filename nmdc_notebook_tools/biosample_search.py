@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from nmdc_notebook_tools.api import NMDClient
+from nmdc_notebook_tools.nmdc_search import NMDClient
 import requests
 import urllib.parse
 from typing import List, Dict
@@ -10,12 +10,16 @@ from nmdc_notebook_tools.utils import Utils
 logger = logging.getLogger(__name__)
 
 
-class Biosample:
+class BiosampleSearch:
     """
     Class to interact with the NMDC API to get biosamples.
     """
 
     def __init__(self):
+        # inherit nmdcsearch, use super inint
+        # super().__init__()
+        # intemediate class between nmdcsearch and biosample search thats collection search (abstract, need to say which collection it is)
+        # attribute is biosample_set
         pass
 
     def get_all_biosamples(
@@ -35,28 +39,7 @@ class Biosample:
         Raises:
             RuntimeError: An error is raised if the API request fails.
         """
-        api_client = NMDClient()
-        url = f"{api_client.base_url}/nmdcschema/biosample_set?max_page_size={page_size}&projection={fields}"
-        # get the reponse
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
-        except requests.exceptions.RequestException as e:
-            logger.error("API request failed", exc_info=True)
-            raise RuntimeError("Failed to get biosamples from NMDC API") from e
-        else:
-            logging.debug(
-                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
-            )
-        # otherwise, get all pages
-        if all_pages:
-            ut = Utils()
-            results = ut.get_all_pages(
-                response, "biosample_set", filter, page_size, fields
-            )["resources"]
-
-        results = response.json()["results"]
-        return results
+        #
 
     def biosample_by_id(self, sample_id: str) -> Dict:
         """
