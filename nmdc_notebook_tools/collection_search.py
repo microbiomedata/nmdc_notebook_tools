@@ -8,13 +8,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class CollectionSearch:
+class CollectionSearch(NMDCSearch):
     """
     Class to interact with the NMDC API to get collections of data. Must know the collection name to query.
     """
 
     def __init__(self, collection_name):
         self.collection_name = collection_name
+        super().__init__()
 
     def get_record(
         self,
@@ -33,13 +34,12 @@ class CollectionSearch:
             fields: str
                 The fields to return. Default is all fields.
         """
-        api_client = NMDCSearch()
         dp = DataProcessing()
         # if fields is empty, return all fields
         if not fields:
             fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
         filter = urllib.parse.quote_plus(filter)
-        url = f"{api_client.base_url}/nmdcschema/{self.collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}"
+        url = f"{self.base_url}/nmdcschema/{self.collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -68,13 +68,13 @@ class CollectionSearch:
         fields: str = "",
     ):
         results = response.json()
-        api_client = NMDCSearch()
+
         while True:
             if response.json().get("next_page_token"):
                 next_page_token = response.json()["next_page_token"]
             else:
                 break
-            url = f"{api_client.base_url}/nmdcschema/{self.collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}&page_token={next_page_token}"
+            url = f"{self.base_url}/nmdcschema/{self.collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}&page_token={next_page_token}"
             try:
                 response = requests.get(url)
                 response.raise_for_status()
@@ -102,9 +102,8 @@ class CollectionSearch:
                 The fields to return. Default is all fields.
                 Example: "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
         """
-        api_client = NMDCSearch()
         filter = urllib.parse.quote_plus(filter)
-        url = f"{api_client.base_url}/nmdcschema/{self.collection_name}/?filter={filter}&max_page_size={page_size}&projection={fields}"
+        url = f"{self.base_url}/nmdcschema/{self.collection_name}/?filter={filter}&max_page_size={page_size}&projection={fields}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -135,10 +134,9 @@ class CollectionSearch:
             fields: str
                 The fields to return. Default is all fields.
         """
-        api_client = NMDCSearch()
         filter = f'{{"{attribute_name}":{{"$regex":"{attribute_value}"}}}}'
         filter = urllib.parse.quote_plus(filter)
-        url = f"{api_client.base_url}/nmdcschema/{self.collection_name}?filter={filter}&max_page_size={page_size}&projection={fields}"
+        url = f"{self.base_url}/nmdcschema/{self.collection_name}?filter={filter}&max_page_size={page_size}&projection={fields}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -183,10 +181,9 @@ class CollectionSearch:
             raise ValueError(
                 f"Invalid comparison input: {comparison}\n Valid inputs: {allowed_comparisons}"
             )
-        api_client = NMDCSearch()
         filter = f'{{"lat_lon.latitude": {{"${comparison}": {latitude}}}}}'
         filter = urllib.parse.quote_plus(filter)
-        url = f"{api_client.base_url}/nmdcschema/{self.collection_name}/?filter={filter}&max_page_size={page_size}&projection={fields}"
+        url = f"{self.base_url}/nmdcschema/{self.collection_name}/?filter={filter}&max_page_size={page_size}&projection={fields}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -230,10 +227,9 @@ class CollectionSearch:
             raise ValueError(
                 f"Invalid comparison input: {comparison}\n Valid inputs: {allowed_comparisons}"
             )
-        api_client = NMDCSearch()
         filter = f'{{"lat_lon.longitude": {{"${comparison}": {longitude}}}}}'
         filter = urllib.parse.quote_plus(filter)
-        url = f"{api_client.base_url}/nmdcschema/{self.collection_name}/?filter={filter}&max_page_size={page_size}&projection={fields}"
+        url = f"{self.base_url}/nmdcschema/{self.collection_name}/?filter={filter}&max_page_size={page_size}&projection={fields}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -299,10 +295,9 @@ class CollectionSearch:
             raise ValueError(
                 f"Invalid comparison input: {long_comparison}\n Valid inputs: {allowed_comparisons}"
             )
-        api_client = NMDCSearch()
         filter = f'{{"lat_lon.latitude": {{"${lat_comparison}": {latitude}}}, "lat_lon.longitude": {{"${long_comparison}": {longitude}}}}}'
         filter = urllib.parse.quote_plus(filter)
-        url = f"{api_client.base_url}/nmdcschema/{self.collection_name}/?filter={filter}&per_page={page_size}&projection={fields}"
+        url = f"{self.base_url}/nmdcschema/{self.collection_name}/?filter={filter}&per_page={page_size}&projection={fields}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -338,7 +333,6 @@ class CollectionSearch:
                 True to return all pages. False to return the first page. Default is False.
         """
         results = []
-        api_client = NMDCSearch()
         dp = DataProcessing()
         # create the filter based on data object type
         filter = f'{{"data_object_type":{{"$regex": "{data_object_type}"}}}}'
@@ -346,7 +340,7 @@ class CollectionSearch:
         # if fields is empty, return all fields
         if not fields:
             fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
-        url = f"{api_client.base_url}/nmdcschema/data_object_set?filter={filter}&page_size={max_page_size}&projection={fields}"
+        url = f"{self.base_url}/nmdcschema/data_object_set?filter={filter}&page_size={max_page_size}&projection={fields}"
         # get the reponse
         try:
             response = requests.get(url)
@@ -383,12 +377,11 @@ class CollectionSearch:
                 The fields to return. Default is all fields.
         """
         results = []
-        api_client = NMDCSearch()
         dp = DataProcessing()
         # if fields is empty, return all fields
         if not fields:
             fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
-        url = f"{api_client.base_url}/nmdcschema/{self.collection_name}/{collection_id}?page_size={max_page_size}&projection={fields}"
+        url = f"{self.base_url}/nmdcschema/{self.collection_name}/{collection_id}?page_size={max_page_size}&projection={fields}"
         # get the reponse
         try:
             response = requests.get(url)
@@ -414,8 +407,7 @@ class CollectionSearch:
             doc_id: str
                 The id of the document.
         """
-        api_client = NMDCSearch()
-        url = f"{api_client.base_url}/nmdcschema/ids/{doc_id}/collection-name"
+        url = f"{self.base_url}/nmdcschema/ids/{doc_id}/collection-name"
         try:
             response = requests.get(url)
             response.raise_for_status()
