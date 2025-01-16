@@ -11,6 +11,10 @@ logger = logging.getLogger(__name__)
 
 
 class Biosample:
+    """
+    Class to interact with the NMDC API to get biosamples.
+    """
+
     def __init__(self):
         pass
 
@@ -119,9 +123,7 @@ class Biosample:
         """
         api_client = NMDClient()
         filter = f'{{"{attribute_name}": "{attribute_value}"}}'
-        print(filter)
         filter = urllib.parse.quote_plus(filter)
-
         url = f"{api_client.base_url}/nmdcschema/biosample_set?filter={filter}&per_page={page_size}"
         try:
             response = requests.get(url)

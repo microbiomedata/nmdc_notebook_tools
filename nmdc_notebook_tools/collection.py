@@ -9,6 +9,10 @@ logger = logging.getLogger(__name__)
 
 
 class Collection:
+    """
+    Class to interact with the NMDC API to get collections of data. Must know the collection name to query.
+    """
+
     def __init__(self):
         pass
 
@@ -180,6 +184,7 @@ class Collection:
 
     def get_collection_name_from_id(self, doc_id: str):
         """
+        Used when you have an id but not the collection name.
         Determine the schema class by which the id belongs to.
         params:
             doc_id: str

@@ -14,7 +14,7 @@ class Study:
     def __init__(self):
         pass
 
-    def find_study_by_id(self, study_id: str) -> Dict:
+    def study_by_id(self, study_id: str) -> Dict:
         """
         Get a study from the NMDC API by its id.
         params:
@@ -22,8 +22,7 @@ class Study:
                 The id of the study to query.
         """
         api_client = NMDClient()
-        dp = DataProcessing()
-        url = f"{api_client.base_url}/studies/{study_id}"
+        url = f"{api_client.base_url}/nmdcschema/study_set/{study_id}"
         # get the reponse
         try:
             response = requests.get(url)
@@ -38,8 +37,8 @@ class Study:
         results = response.json()
         return results
 
-    def find_study_by_attribute(
-        self, attribute_name, attribute_value, page_size=25
+    def study_by_attribute(
+        self, attribute_name, attribute_value, page_size=25, fields=""
     ) -> List[Dict]:
         """
         Get a study from the NMDC API by its name. Studies can be filtered based on their attributes found https://microbiomedata.github.io/nmdc-schema/Study/.
@@ -52,11 +51,15 @@ class Study:
                 The value of the attribute to filter by.
             page_size: int
                 The number of results to return per page. Default is 25.
+            fields: str
+                Specify fields to return in the response in a comma separated list. Default is all fields.
+                    Example: "id,name,description"
+
         """
         api_client = NMDClient()
-        filter = urllib.parse.quote_plus(f"{attribute_name}.search:{attribute_value}")
-
-        url = f"{api_client.base_url}/studies?filter={filter}&per_page={page_size}"
+        filter = f'{{"{attribute_name}": "{attribute_value}"}}'
+        filter = urllib.parse.quote_plus(filter)
+        url = f"{api_client.base_url}/nmdcschema/study_set?filter={filter}&per_page={page_size}&projection={fields}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -67,25 +70,25 @@ class Study:
             logging.debug(
                 f"API request response: {response.json()}\n API Status Code: {response.status_code}"
             )
-        results = response.json()["results"]
+        results = response.json()["resources"]
         return results
 
-    def find_study_by_filter(self, filter, page_size=25) -> List[Dict]:
+    def study_by_filter(self, filter, page_size=25, fields="") -> List[Dict]:
         """
         Get a study from the NMDC API by its name. Studies can be filtered based on their attributes found https://microbiomedata.github.io/nmdc-schema/Study/.
         params:
             filter: str
-                The filter to use to query the studies.
-                Example: id:my_id, name:my_study, description:my_description
-
+                The filter to use to query the studies. Must be in the form of a MongoDB query.
+                Example: '{"id":"nmdc:study-0001"}'
             page_size: int
                 The number of results to return per page. Default is 25.
+            fields: str
+                Specify fields to return in the response in a comma separated list. Default is all fields.
+                    Example: "id,name,description"
         """
         api_client = NMDClient()
         filter = urllib.parse.quote_plus(filter)
-        url = (
-            f"{api_client.base_url}/studies?&filter={filter}&max_page_size={page_size}"
-        )
+        url = f"{api_client.base_url}/nmdcschema/study_set/?&filter={filter}&max_page_size={page_size}&projection={fields}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -96,10 +99,10 @@ class Study:
             logging.debug(
                 f"API request response: {response.json()}\n API Status Code: {response.status_code}"
             )
-        results = response.json()["results"]
+        results = response.json()["resources"]
         return results
 
-    def find_study_by_pi(self, pi_name: str, page_size=25) -> List[Dict]:
+    def find_study_by_pi(self, pi_name: str, page_size=25, fields="") -> List[Dict]:
         """
         Get a study from the NMDC API by its name. Studies can be filtered based on their attributes found https://microbiomedata.github.io/nmdc-schema/Study/.
         params:
@@ -107,12 +110,15 @@ class Study:
                 The name of the PI to filter by.
             page_size: int
                 The number of results to return per page. Default is 25.
+            fields: str
+                Specify fields to return in the response in a comma separated list. Default is all fields.
+                    Example: "id,name,description"
         """
         api_client = NMDClient()
         filter = urllib.parse.quote_plus(
-            f"principal_investigator.has_raw_value.search:{pi_name}"
+            f'{{"principal_investigator.has_raw_value": {pi_name}}}'
         )
-        url = f"{api_client.base_url}/studies?filter={filter}&per_page={page_size}"
+        url = f"{api_client.base_url}/nmdcschema/study_set/?filter={filter}&per_page={page_size}&projection={fields}"
         try:
             response = requests.get(url)
             response.raise_for_status()
