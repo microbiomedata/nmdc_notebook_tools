@@ -16,7 +16,7 @@ class CollectionSearch:
     def __init__(self, collection_name):
         self.collection_name = collection_name
 
-    def get_collection(
+    def get_record(
         self,
         filter: str = "",
         max_page_size: int = 100,
@@ -88,7 +88,237 @@ class CollectionSearch:
             results = {"resources": results["resources"] + response.json()["resources"]}
         return results
 
-    def get_collection_data_object_by_type(
+    def get_record_by_filter(self, filter: str, page_size=25, fields=""):
+        """
+        Get a record from the NMDC API by its id.
+        params:
+            filter: str
+                The filter to use to query the collection. Must be in MonogDB query format.
+                    Resources found here - https://www.mongodb.com/docs/manual/reference/method/db.collection.find/#std-label-method-find-query
+                Example: {"name":{"my record name"}}
+            page_size: int
+                The number of results to return per page. Default is 25.
+            fields: str
+                The fields to return. Default is all fields.
+                Example: "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
+        """
+        api_client = NMDCSearch()
+        filter = urllib.parse.quote_plus(filter)
+        url = f"{api_client.base_url}/nmdcschema/{self.collection_name}/?filter={filter}&max_page_size={page_size}&projection={fields}"
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError(
+                f"Failed to get {self.collection_name}(s) from NMDC API"
+            ) from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
+        results = response.json()["resources"]
+        return results
+
+    def get_record_by_attribute(
+        self, attribute_name, attribute_value, page_size=25, fields=""
+    ):
+        """
+        Get a record from the NMDC API by its name. Records can be filtered based on their attributes found https://microbiomedata.github.io/nmdc-schema/.
+        params:
+            attribute_name: str
+                The name of the attribute to filter by.
+            attribute_value: str
+                The value of the attribute to filter by.
+            page_size: int
+                The number of results to return per page. Default is 25.
+            fields: str
+                The fields to return. Default is all fields.
+        """
+        api_client = NMDCSearch()
+        filter = f'{{"{attribute_name}":{{"$regex":"{attribute_value}"}}}}'
+        filter = urllib.parse.quote_plus(filter)
+        url = f"{api_client.base_url}/nmdcschema/{self.collection_name}?filter={filter}&max_page_size={page_size}&projection={fields}"
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError(
+                f"Failed to get {self.collection_name} from NMDC API"
+            ) from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
+        results = response.json()["resources"]
+        return results
+
+    def get_record_by_latitude(
+        self, comparison: str, latitude: float, page_size=25, fields=""
+    ):
+        """
+        Get a record from the NMDC API by latitude comparison.
+        params:
+            comparison: str
+                The comparison to use to query the record. MUST BE ONE OF THE FOLLOWING:
+                    eq    - Matches values that are equal to the given value.
+                    gt    - Matches if values are greater than the given value.
+                    lt    - Matches if values are less than the given value.
+                    gte    - Matches if values are greater or equal to the given value.
+                    lte - Matches if values are less or equal to the given value.
+            latitude: float
+                The latitude of the record to query.
+            page_size: int
+                The number of results to return per page. Default is 25.
+            fields: str
+                The fields to return. Default is all fields.
+                Example: "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
+        """
+        allowed_comparisons = ["eq", "gt", "lt", "gte", "lte"]
+        if comparison not in allowed_comparisons:
+            logger.error(
+                f"Invalid comparison input: {comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+            raise ValueError(
+                f"Invalid comparison input: {comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+        api_client = NMDCSearch()
+        filter = f'{{"lat_lon.latitude": {{"${comparison}": {latitude}}}}}'
+        filter = urllib.parse.quote_plus(filter)
+        url = f"{api_client.base_url}/nmdcschema/{self.collection_name}/?filter={filter}&max_page_size={page_size}&projection={fields}"
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError(
+                f"Failed to get {self.collection_name} from NMDC API"
+            ) from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
+        return response.json()["resources"]
+
+    def get_record_by_longitude(
+        self, comparison: str, longitude: float, page_size=25, fields=""
+    ):
+        """
+        Get a record from the NMDC API by longitude comparison.
+        params:
+            comparison: str
+                The comparison to use to query the record. MUST BE ONE OF THE FOLLOWING:
+                    eq    - Matches values that are equal to the given value.
+                    gt    - Matches if values are greater than the given value.
+                    lt    - Matches if values are less than the given value.
+                    gte    - Matches if values are greater or equal to the given value.
+                    lte - Matches if values are less or equal to the given value.
+            longitude: float
+                The longitude of the record to query.
+            page_size: int
+                The number of results to return per page. Default is 25.
+            fields: str
+                The fields to return. Default is all fields.
+                Example: "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
+        """
+        allowed_comparisons = ["eq", "gt", "lt", "gte", "lte"]
+        if comparison not in allowed_comparisons:
+            logger.error(
+                f"Invalid comparison input: {comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+            raise ValueError(
+                f"Invalid comparison input: {comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+        api_client = NMDCSearch()
+        filter = f'{{"lat_lon.longitude": {{"${comparison}": {longitude}}}}}'
+        filter = urllib.parse.quote_plus(filter)
+        url = f"{api_client.base_url}/nmdcschema/{self.collection_name}/?filter={filter}&max_page_size={page_size}&projection={fields}"
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError(
+                f"Failed to get {self.collection_name} from NMDC API"
+            ) from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
+        return response.json()["resources"]
+
+    def get_record_by_lat_long(
+        self,
+        lat_comparison: str,
+        long_comparison: str,
+        latitude: float,
+        longitude: float,
+        page_size=25,
+        fields="",
+    ):
+        """
+        Get a record from the NMDC API by latitude and longitude comparison.
+        params:
+            lat_comparison: str
+                The comparison to use to query the record for latitude. MUST BE ONE OF THE FOLLOWING:
+                    eq    - Matches values that are equal to the given value.
+                    gt    - Matches if values are greater than the given value.
+                    lt    - Matches if values are less than the given value.
+                    gte    - Matches if values are greater or equal to the given value.
+                    lte - Matches if values are less or equal to the given value.
+            long_comparison: str
+                The comparison to use to query the record for longitude. MUST BE ONE OF THE FOLLOWING:
+                    eq    - Matches values that are equal to the given value.
+                    gt    - Matches if values are greater than the given value.
+                    lt    - Matches if values are less than the given value.
+                    gte    - Matches if values are greater or equal to the given value.
+                    lte - Matches if values are less or equal to the given value.
+            latitude: float
+                The latitude of the record to query.
+            longitude: float
+                The longitude of the record to query.
+            page_size: int
+                The number of results to return per page. Default is 25.
+            fields: str
+                The fields to return. Default is all fields.
+                Example: "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
+        """
+        allowed_comparisons = ["eq", "gt", "lt", "gte", "lte"]
+        if lat_comparison not in allowed_comparisons:
+            logger.error(
+                f"Invalid comparison input: {lat_comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+            raise ValueError(
+                f"Invalid comparison input: {lat_comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+        if long_comparison not in allowed_comparisons:
+            logger.error(
+                f"Invalid comparison input: {long_comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+            raise ValueError(
+                f"Invalid comparison input: {long_comparison}\n Valid inputs: {allowed_comparisons}"
+            )
+        api_client = NMDCSearch()
+        filter = f'{{"lat_lon.latitude": {{"${lat_comparison}": {latitude}}}, "lat_lon.longitude": {{"${long_comparison}": {longitude}}}}}'
+        filter = urllib.parse.quote_plus(filter)
+        url = f"{api_client.base_url}/nmdcschema/{self.collection_name}/?filter={filter}&per_page={page_size}&projection={fields}"
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError(
+                f"Failed to get {self.collection_name} from NMDC API"
+            ) from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
+        results = response.json()["resources"]
+        return results
+
+    def get_record_data_object_by_type(
         self,
         data_object_type: str = "",
         max_page_size: int = 100,
@@ -136,7 +366,7 @@ class CollectionSearch:
             )["resources"]
         return dp.convert_to_df(results)
 
-    def get_collection_by_id(
+    def get_record_by_id(
         self,
         collection_id: str,
         max_page_size: int = 100,
@@ -175,7 +405,7 @@ class CollectionSearch:
 
         return dp.convert_to_df(results)
 
-    def get_collection_name_from_id(self, doc_id: str):
+    def get_record_name_from_id(self, doc_id: str):
         """
         Used when you have an id but not the collection name.
         Determine the schema class by which the id belongs to.
@@ -191,7 +421,7 @@ class CollectionSearch:
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
             logger.error("API request failed", exc_info=True)
-            raise RuntimeError("Failed to get biosample from NMDC API") from e
+            raise RuntimeError("Failed to get record from NMDC API") from e
         else:
             logging.debug(
                 f"API request response: {response.json()}\n API Status Code: {response.status_code}"
