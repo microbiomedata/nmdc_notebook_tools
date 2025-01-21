@@ -130,7 +130,6 @@ class CollectionSearch(NMDCSearch):
         collection_id: str,
         max_page_size: int = 100,
         fields: str = "",
-        all_pages=False,
     ):
         """
         Get a collection of data from the NMDC API by id.
@@ -141,8 +140,6 @@ class CollectionSearch(NMDCSearch):
                 The maximum number of items to return per page. Default is 100.
             fields: str
                 The fields to return. Default is all fields.
-            all_pages: bool
-                True to return all pages. False to return the first page. Default is False.
         """
         url = f"{self.base_url}/nmdcschema/{self.collection_name}/{collection_id}?page_size={max_page_size}&projection={fields}"
         # get the reponse
