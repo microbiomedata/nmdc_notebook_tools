@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from nmdc_notebook_tools.collection_search import CollectionSearch
+from nmdc_notebook_tools.lat_long_filters import LatLongFilters
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-class BiosampleSearch(CollectionSearch):
+class BiosampleSearch(LatLongFilters, CollectionSearch):
     """
     Class to interact with the NMDC API to get biosamples.
     """
