@@ -5,10 +5,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class ProcessSampleSearch(CollectionSearch):
+class ProcessedSampleSearch(CollectionSearch):
     """
     Class to interact with the NMDC API to get process sample sets.
     """
 
     def __init__(self):
-        super().__init__("process_sample_set")
+        super().__init__("processed_sample_set")
