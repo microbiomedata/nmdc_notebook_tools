@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class DataGeneration(CollectionSearch):
+class DataGenerationSearch(CollectionSearch):
     """
     Class to interact with the NMDC API to get data generation sets.
     """

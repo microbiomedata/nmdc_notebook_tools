@@ -5,7 +5,7 @@ Welcome to NMDC Notebook Tools documentation. This package provides tools for in
 
 NMDC Module
 ~~~~~~~~~~
-.. autoclass:: nmdc_notebook_tools.nmdc_search.NmdcSearch
+.. autoclass:: nmdc_notebook_tools.nmdc_search.NMDCSearch
    :members:
    :undoc-members:
    :show-inheritance:
@@ -34,7 +34,7 @@ Latitude Longitude Module
 
 BioSample Module
 ~~~~~~~~~~
-.. autoclass:: nmdc_notebook_tools.biosample_search.BioSampleSearch
+.. autoclass:: nmdc_notebook_tools.biosample_search.BiosampleSearch
    :members:
    :undoc-members:
    :show-inheritance:
@@ -53,9 +53,9 @@ Chemical Entity Module
    :undoc-members:
    :show-inheritance:
 
-Collection Biosamples From Site Module
+Collecting Biosamples From Site Module
 ~~~~~~~~~~
-.. autoclass:: nmdc_notebook_tools.collection_biosamples_from_site_search.CollectionBiosamplesFromSiteSearch
+.. autoclass:: nmdc_notebook_tools.collecting_biosamples_from_site_search.CollectingBiosamplesFromSiteSearch
    :members:
    :undoc-members:
    :show-inheritance:
@@ -82,7 +82,7 @@ Data Object Module
 
 Field Research From Site Module
 ~~~~~~~~~~
-.. autoclass:: nmdc_notebook_tools.field_research_from_site_search.FieldResearchFromSiteSearch
+.. autoclass:: nmdc_notebook_tools.field_research_site_search.FieldResearchSiteSearch
    :members:
    :undoc-members:
    :show-inheritance:
@@ -103,7 +103,7 @@ Manifest Module
 
 Material Module
 ~~~~~~~~~~
-.. autoclass:: nmdc_notebook_tools.material_search.MaterialSearch
+.. autoclass:: nmdc_notebook_tools.material_processing_search.MaterialProcessingSearch
    :members:
    :undoc-members:
    :show-inheritance:
