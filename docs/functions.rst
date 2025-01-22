@@ -1,9 +1,8 @@
 NMDC Notebook Tools Documentation
 =================================
-
-Welcome to NMDC Notebook Tools documentation. This package provides tools for interacting with the NMDC API.
-The Collection Module is a foundational component that defines common behaviors and properties between collections.
-Each subclass is designed to be more user-friendly and specific for certain collections, making them the recommended entry points for using the package. Each function of CollectionSearch can be accessed via each subclass.
+ Welcome to NMDC Notebook Tools documentation. This package provides tools for interacting with the NMDC API.
+|br| The Collection Module is a foundational component that defines common behaviors and properties between collections.
+|br| Each subclass is designed to be more user-friendly and specific for certain collections, making them the recommended entry points for using the package. Each function of CollectionSearch can be accessed via each subclass.
 
 NMDC Module
 ~~~~~~~~~~
