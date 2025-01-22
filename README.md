@@ -4,12 +4,12 @@ A library designed to simplify various research tasks for users looking to lever
 # Usage
 Until this available through pip, the best usage will be to clone the repo and use like this example:
 ```python
-from nmdc_notebook_tools.collection import Collection
+from nmdc_notebook_tools.biosample_search import BiosampleSearch
 
 # Create an instance of the module
-collection_client = Collection()
+biosample_client = BiosampleSearch()
 # Use the variable to call the available functions
-collection_client.get_collection_by_id("biosample", "id")
+biosample_client.get_collection_by_id("biosample", "id")
 ```
 I would recommend periodically runnning `git pull` to get the latest updates.
 
@@ -19,7 +19,7 @@ To see debugging information, include these two lines where ever you are running
 import logging
 logging.basicConfig(level=logging.DEBUG)
 # when this is run, you will see debug information in the console.
-collection_client.get_collection_by_id("biosample", "id")
+biosample_client.get_collection_by_id("biosample", "id")
 ```
 
 # Installation
