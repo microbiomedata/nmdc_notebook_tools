@@ -7,6 +7,11 @@ logger = logging.getLogger(__name__)
 
 
 class CollectionHelpers(NMDCSearch):
+    """
+    Class to interact with the NMDC API to get additional information about collections.
+    These functions may not be specific to a particular collection.
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -14,7 +19,6 @@ class CollectionHelpers(NMDCSearch):
         """
         Used when you have an id but not the collection name.
         Determine the schema class by which the id belongs to.
-        Sets the collection_name attribute.
         params:
             doc_id: str
                 The id of the document.
@@ -32,5 +36,4 @@ class CollectionHelpers(NMDCSearch):
             )
 
         collection_name = response.json()["collection_name"]
-        self.collection_name = collection_name
         return collection_name
