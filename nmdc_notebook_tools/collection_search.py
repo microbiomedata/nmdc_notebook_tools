@@ -2,19 +2,23 @@
 import requests
 from nmdc_notebook_tools.data_processing import DataProcessing
 import urllib.parse
-from nmdc_notebook_tools.api import NMDClient
+from nmdc_notebook_tools.nmdc_search import NMDCSearch
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-class Collection:
-    def __init__(self):
-        pass
+class CollectionSearch(NMDCSearch):
+    """
+    Class to interact with the NMDC API to get collections of data. Must know the collection name to query.
+    """
 
-    def get_collection(
+    def __init__(self, collection_name):
+        self.collection_name = collection_name
+        super().__init__()
+
+    def get_records(
         self,
-        collection_name: str,
         filter: str = "",
         max_page_size: int = 100,
         fields: str = "",
@@ -23,8 +27,6 @@ class Collection:
         """
         Get a collection of data from the NMDC API. Generic function to get a collection of data from the NMDC API. Can provide a specific filter if desired.
         params:
-            collection_name: str
-                The name of the collection to query. Name examples can be found here https://microbiomedata.github.io/nmdc-schema/Database/
             filter: str
                 The filter to apply to the query. Default is an empty string.
             max_page_size: int
@@ -32,13 +34,8 @@ class Collection:
             fields: str
                 The fields to return. Default is all fields.
         """
-        api_client = NMDClient()
-        dp = DataProcessing()
-        # if fields is empty, return all fields
-        if not fields:
-            fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
         filter = urllib.parse.quote_plus(filter)
-        url = f"{api_client.base_url}/nmdcschema/{collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}"
+        url = f"{self.base_url}/nmdcschema/{self.collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -54,27 +51,26 @@ class Collection:
         # otherwise, get all pages
         if all_pages:
             results = self._get_all_pages(
-                response, collection_name, filter, max_page_size, fields
+                response, self.collection_name, filter, max_page_size, fields
             )["resources"]
 
-        return dp.convert_to_df(results)
+        return results
 
     def _get_all_pages(
         self,
         response: requests.models.Response,
-        collection_name: str,
         filter: str = "",
         max_page_size: int = 100,
         fields: str = "",
     ):
         results = response.json()
-        api_client = NMDClient()
+
         while True:
             if response.json().get("next_page_token"):
                 next_page_token = response.json()["next_page_token"]
             else:
                 break
-            url = f"{api_client.base_url}/nmdcschema/{collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}&page_token={next_page_token}"
+            url = f"{self.base_url}/nmdcschema/{self.collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}&page_token={next_page_token}"
             try:
                 response = requests.get(url)
                 response.raise_for_status()
@@ -88,7 +84,81 @@ class Collection:
             results = {"resources": results["resources"] + response.json()["resources"]}
         return results
 
-    def get_collection_data_object_by_type(
+    def get_record_by_filter(
+        self, filter: str, page_size=25, fields="", all_pages=False
+    ):
+        """
+        Get a record from the NMDC API by its id.
+        params:
+            filter: str
+                The filter to use to query the collection. Must be in MonogDB query format.
+                    Resources found here - https://www.mongodb.com/docs/manual/reference/method/db.collection.find/#std-label-method-find-query
+                Example: {"name":{"my record name"}}
+            page_size: int
+                The number of results to return per page. Default is 25.
+            fields: str
+                The fields to return. Default is all fields.
+                Example: "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
+            all_pages: bool
+                True to return all pages. False to return the first page. Default is False.
+        """
+        results = self.get_records(filter, page_size, fields, all_pages)
+        return results
+
+    def get_record_by_attribute(
+        self, attribute_name, attribute_value, page_size=25, fields="", all_pages=False
+    ):
+        """
+        Get a record from the NMDC API by its name. Records can be filtered based on their attributes found https://microbiomedata.github.io/nmdc-schema/.
+        params:
+            attribute_name: str
+                The name of the attribute to filter by.
+            attribute_value: str
+                The value of the attribute to filter by.
+            page_size: int
+                The number of results to return per page. Default is 25.
+            fields: str
+                The fields to return. Default is all fields.
+            all_pages: bool
+        """
+        filter = f'{{"{attribute_name}":{{"$regex":"{attribute_value}"}}}}'
+        results = self.get_records(filter, page_size, fields, all_pages)
+        return results
+
+    def get_record_by_id(
+        self,
+        collection_id: str,
+        max_page_size: int = 100,
+        fields: str = "",
+    ):
+        """
+        Get a collection of data from the NMDC API by id.
+        params:
+            collection_id: str
+                The id of the collection.
+            max_page_size: int
+                The maximum number of items to return per page. Default is 100.
+            fields: str
+                The fields to return. Default is all fields.
+        """
+        url = f"{self.base_url}/nmdcschema/{self.collection_name}/{collection_id}?page_size={max_page_size}&projection={fields}"
+        # get the reponse
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.error("API request failed", exc_info=True)
+            raise RuntimeError("Failed to get collection by id from NMDC API") from e
+        else:
+            logging.debug(
+                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
+            )
+
+        results = response.json()["resources"]
+
+        return results
+
+    def get_record_data_object_by_type(
         self,
         data_object_type: str = "",
         max_page_size: int = 100,
@@ -108,7 +178,6 @@ class Collection:
                 True to return all pages. False to return the first page. Default is False.
         """
         results = []
-        api_client = NMDClient()
         dp = DataProcessing()
         # create the filter based on data object type
         filter = f'{{"data_object_type":{{"$regex": "{data_object_type}"}}}}'
@@ -116,7 +185,7 @@ class Collection:
         # if fields is empty, return all fields
         if not fields:
             fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
-        url = f"{api_client.base_url}/nmdcschema/data_object_set?filter={filter}&page_size={max_page_size}&projection={fields}"
+        url = f"{self.base_url}/nmdcschema/data_object_set?filter={filter}&page_size={max_page_size}&projection={fields}"
         # get the reponse
         try:
             response = requests.get(url)
@@ -135,72 +204,6 @@ class Collection:
                 response, "data_object_set", filter, max_page_size, fields
             )["resources"]
         return dp.convert_to_df(results)
-
-    def get_collection_by_id(
-        self,
-        collection_name: str,
-        collection_id: str,
-        max_page_size: int = 100,
-        fields: str = "",
-    ):
-        """
-        Get a collection of data from the NMDC API by id.
-        params:
-            collection_name: str
-                The name of the collection to query. Name examples can be found here https://microbiomedata.github.io/nmdc-schema/Database/
-            collection_id: str
-                The id of the collection.
-            max_page_size: int
-                The maximum number of items to return per page. Default is 100.
-            fields: str
-                The fields to return. Default is all fields.
-        """
-        results = []
-        api_client = NMDClient()
-        dp = DataProcessing()
-        # if fields is empty, return all fields
-        if not fields:
-            fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
-        url = f"{api_client.base_url}/nmdcschema/{collection_name}/{collection_id}?page_size={max_page_size}&projection={fields}"
-        # get the reponse
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
-        except requests.exceptions.RequestException as e:
-            logger.error("API request failed", exc_info=True)
-            raise RuntimeError("Failed to get collection by id from NMDC API") from e
-        else:
-            logging.debug(
-                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
-            )
-
-        results = response.json()["resources"]
-
-        return dp.convert_to_df(results)
-
-    def get_collection_name_from_id(self, doc_id: str):
-        """
-        Determine the schema class by which the id belongs to.
-        params:
-            doc_id: str
-                The id of the document.
-        """
-        api_client = NMDClient()
-        url = f"{api_client.base_url}/nmdcschema/ids/{doc_id}/collection-name"
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
-        except requests.exceptions.RequestException as e:
-            logger.error("API request failed", exc_info=True)
-            raise RuntimeError("Failed to get biosample from NMDC API") from e
-        else:
-            logging.debug(
-                f"API request response: {response.json()}\n API Status Code: {response.status_code}"
-            )
-
-        collection_name = response.json()["collection_name"]
-
-        return collection_name
 
 
 if __name__ == "__main__":
