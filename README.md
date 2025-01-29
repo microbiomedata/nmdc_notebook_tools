@@ -25,7 +25,7 @@ biosample_client.get_collection_by_id("biosample", "id")
 To install, run:
 
 ```bash
-python3 -m pip install nmdc_notebook_tool
+python3 -m pip install nmdc_notebook_tools
 ```
 
 Peridodically run
