@@ -47,3 +47,22 @@ class FunctionalSearch:
             filter, page_size, fields, all_pages
         )
         return result
+
+    def get_records_by_id(
+        self,
+        filter: str = "",
+        max_page_size: int = 100,
+        fields: str = "",
+        all_pages: bool = False,
+    ):
+        """
+        Get a collection of data from the NMDC API. Generic function to get a collection of data from the NMDC API. Can provide a specific filter if desired.
+        params:
+            filter: str
+                The filter to apply to the query. Default is an empty string.
+            max_page_size: int
+                The maximum number of items to return per page. Default is 100.
+            fields: str
+                The fields to return. Default is all fields.
+        """
+        self.collectioninstance.get_records(filter, max_page_size, fields, all_pages)
