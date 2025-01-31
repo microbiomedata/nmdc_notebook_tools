@@ -11,15 +11,20 @@ class FunctionalSearch:
     def __init__(self):
         self.collectioninstance = CollectionSearch("functional_annotation_agg")
 
-    def get_functional_annotation_id(
-        self, id: str, id_type: str, page_size=25, fields="", all_pages=False
+    def get_functional_annotations(
+        self,
+        annotation: str,
+        annotation_type: str,
+        page_size=25,
+        fields="",
+        all_pages=False,
     ):
         """
         Get a record from the NMDC API by id. ID types can be KEGG, COG, or PFAM.
         params:
-            id: str
+            annotation: str
                 The data base id to query the function annotations.
-            id_type:
+            annotation_type:
                 The type of id to query. MUST be one of the following:
                     KEGG
                     COG
@@ -32,23 +37,23 @@ class FunctionalSearch:
             all_pages: bool
                 True to return all pages. False to return the first page. Default is False.
         """
-        if id_type not in ["KEGG", "COG", "PFAM"]:
+        if annotation_type not in ["KEGG", "COG", "PFAM"]:
             raise ValueError("id_type must be one of the following: KEGG, COG, PFAM")
-        if id_type == "KEGG":
-            formatted_id_type = f"KEGG.ORTHOLOGY:{id}"
-        elif id_type == "COG":
-            formatted_id_type = f"COG:{id}"
-        elif id_type == "PFAM":
-            formatted_id_type = f"PFAM:{id}"
+        if annotation_type == "KEGG":
+            formatted_annotation_type = f"KEGG.ORTHOLOGY:{annotation}"
+        elif annotation_type == "COG":
+            formatted_annotation_type = f"COG:{annotation}"
+        elif annotation_type == "PFAM":
+            formatted_annotation_type = f"PFAM:{annotation}"
 
-        filter = f'{{"gene_function_id": "{formatted_id_type}"}}'
+        filter = f'{{"gene_function_id": "{formatted_annotation_type}"}}'
 
         result = self.collectioninstance.get_record_by_filter(
             filter, page_size, fields, all_pages
         )
         return result
 
-    def get_records_by_id(
+    def get_records(
         self,
         filter: str = "",
         max_page_size: int = 100,
