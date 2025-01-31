@@ -27,6 +27,13 @@ Latitude Longitude Module
    :undoc-members:
    :show-inheritance:
 
+Functional Search Module
+~~~~~~~~~~
+.. autoclass:: nmdc_notebook_tools.functional_search.FunctionalSearch
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Collection Helpers
 ~~~~~~~~~~
 .. autoclass:: nmdc_notebook_tools.collection_helpers.CollectionHelpers
@@ -134,6 +141,13 @@ Storage Process Subclass
 Study Subclass
 ~~~~~~~~~~
 .. autoclass:: nmdc_notebook_tools.study_search.StudySearch
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Functional Annotation Agg Subclass
+~~~~~~~~~~
+.. autoclass:: nmdc_notebook_tools.functional_annotation_agg_search.FunctionalAnnotationAggSearch
    :members:
    :undoc-members:
    :show-inheritance:
