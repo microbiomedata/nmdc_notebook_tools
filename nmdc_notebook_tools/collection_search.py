@@ -50,9 +50,9 @@ class CollectionSearch(NMDCSearch):
         results = response.json()["resources"]
         # otherwise, get all pages
         if all_pages:
-            results = self._get_all_pages(
-                response, self.collection_name, filter, max_page_size, fields
-            )["resources"]
+            results = self._get_all_pages(response, filter, max_page_size, fields)[
+                "resources"
+            ]
 
         return results
 

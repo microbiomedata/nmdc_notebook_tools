@@ -21,3 +21,10 @@ def test_find_study_by_filter():
         stu[0]["name"]
         == "Lab enrichment of tropical soil microbial communities from Luquillo Experimental Forest, Puerto Rico"
     )
+
+
+def test_get_studies():
+    st = StudySearch()
+    studies = st.get_records(max_page_size=20, all_pages=True)
+    print(studies)
+    assert len(studies) > 32
