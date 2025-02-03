@@ -6,6 +6,10 @@ logger = logging.getLogger(__name__)
 
 
 class LatLongFilters(CollectionSearch):
+    """
+    Class to interact with the NMDC API to filter sets by latitude and longitude.
+    """
+
     def __init__(self, collection_name):
         self.collection_name = collection_name
         super().__init__(self.collection_name)
