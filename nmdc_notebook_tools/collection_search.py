@@ -35,7 +35,7 @@ class CollectionSearch(NMDCSearch):
                 The fields to return. Default is all fields.
         """
         filter = urllib.parse.quote_plus(filter)
-        url = f"{self.base_url}/nmdcschema/{self.collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}"
+        url = f"{self.base_url}/nmdcschema/{self.collection_name}?filter={filter}&max_page_size={max_page_size}&projection={fields}"
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -70,7 +70,7 @@ class CollectionSearch(NMDCSearch):
                 next_page_token = response.json()["next_page_token"]
             else:
                 break
-            url = f"{self.base_url}/nmdcschema/{self.collection_name}?filter={filter}&page_size={max_page_size}&projection={fields}&page_token={next_page_token}"
+            url = f"{self.base_url}/nmdcschema/{self.collection_name}?filter={filter}&max_page_size={max_page_size}&projection={fields}&page_token={next_page_token}"
             try:
                 response = requests.get(url)
                 response.raise_for_status()
@@ -85,7 +85,7 @@ class CollectionSearch(NMDCSearch):
         return results
 
     def get_record_by_filter(
-        self, filter: str, page_size=25, fields="", all_pages=False
+        self, filter: str, max_page_size=25, fields="", all_pages=False
     ):
         """
         Get a record from the NMDC API by its id.
@@ -94,7 +94,7 @@ class CollectionSearch(NMDCSearch):
                 The filter to use to query the collection. Must be in MonogDB query format.
                     Resources found here - https://www.mongodb.com/docs/manual/reference/method/db.collection.find/#std-label-method-find-query
                 Example: {"name":{"my record name"}}
-            page_size: int
+            max_page_size: int
                 The number of results to return per page. Default is 25.
             fields: str
                 The fields to return. Default is all fields.
@@ -102,11 +102,16 @@ class CollectionSearch(NMDCSearch):
             all_pages: bool
                 True to return all pages. False to return the first page. Default is False.
         """
-        results = self.get_records(filter, page_size, fields, all_pages)
+        results = self.get_records(filter, max_page_size, fields, all_pages)
         return results
 
     def get_record_by_attribute(
-        self, attribute_name, attribute_value, page_size=25, fields="", all_pages=False
+        self,
+        attribute_name,
+        attribute_value,
+        max_page_size=25,
+        fields="",
+        all_pages=False,
     ):
         """
         Get a record from the NMDC API by its name. Records can be filtered based on their attributes found https://microbiomedata.github.io/nmdc-schema/.
@@ -115,14 +120,14 @@ class CollectionSearch(NMDCSearch):
                 The name of the attribute to filter by.
             attribute_value: str
                 The value of the attribute to filter by.
-            page_size: int
+            max_page_size: int
                 The number of results to return per page. Default is 25.
             fields: str
                 The fields to return. Default is all fields.
             all_pages: bool
         """
         filter = f'{{"{attribute_name}":{{"$regex":"{attribute_value}"}}}}'
-        results = self.get_records(filter, page_size, fields, all_pages)
+        results = self.get_records(filter, max_page_size, fields, all_pages)
         return results
 
     def get_record_by_id(
@@ -141,7 +146,7 @@ class CollectionSearch(NMDCSearch):
             fields: str
                 The fields to return. Default is all fields.
         """
-        url = f"{self.base_url}/nmdcschema/{self.collection_name}/{collection_id}?page_size={max_page_size}&projection={fields}"
+        url = f"{self.base_url}/nmdcschema/{self.collection_name}/{collection_id}?max_page_size={max_page_size}&projection={fields}"
         # get the reponse
         try:
             response = requests.get(url)
@@ -185,7 +190,7 @@ class CollectionSearch(NMDCSearch):
         # if fields is empty, return all fields
         if not fields:
             fields = "id,name,description,alternative_identifiers,file_size_bytes,md5_checksum,data_object_type,url,type"
-        url = f"{self.base_url}/nmdcschema/data_object_set?filter={filter}&page_size={max_page_size}&projection={fields}"
+        url = f"{self.base_url}/nmdcschema/data_object_set?filter={filter}&max_page_size={max_page_size}&projection={fields}"
         # get the reponse
         try:
             response = requests.get(url)

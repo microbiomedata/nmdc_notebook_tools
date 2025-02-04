@@ -23,8 +23,15 @@ def test_find_study_by_filter():
     )
 
 
-def test_get_studies():
+def test_get_studies_all_pages():
     st = StudySearch()
     studies = st.get_records(max_page_size=20, all_pages=True)
     print(studies)
     assert len(studies) > 32
+
+
+def test_get_studies():
+    st = StudySearch()
+    studies = st.get_records(max_page_size=100)
+    print(studies)
+    assert len(studies) == 32
