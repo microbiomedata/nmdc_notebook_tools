@@ -112,6 +112,7 @@ class CollectionSearch(NMDCSearch):
         max_page_size=25,
         fields="",
         all_pages=False,
+        exact_match=False,
     ):
         """
         Get a record from the NMDC API by its name. Records can be filtered based on their attributes found https://microbiomedata.github.io/nmdc-schema/.
@@ -125,8 +126,15 @@ class CollectionSearch(NMDCSearch):
             fields: str
                 The fields to return. Default is all fields.
             all_pages: bool
+                True to return all pages. False to return the first page. Default is False.
+            exact_match: bool
+                This var is used to determine if the inputted attribute value is an exact match or a partial match. Default is False, meaning the user does not need to input an exact match.
+                Under the hood this is used to determine if the inputted attribute value should be wrapped in a regex expression.
         """
-        filter = f'{{"{attribute_name}":{{"$regex":"{attribute_value}"}}}}'
+        if exact_match:
+            filter = f'{{"{attribute_name}":"{attribute_value}"}}'
+        else:
+            filter = f'{{"{attribute_name}":{{"$regex":"{attribute_value}"}}}}'
         results = self.get_records(filter, max_page_size, fields, all_pages)
         return results
 

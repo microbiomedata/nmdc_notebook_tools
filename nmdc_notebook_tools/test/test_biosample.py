@@ -2,6 +2,7 @@
 from nmdc_notebook_tools.biosample_search import BiosampleSearch
 import logging
 from nmdc_notebook_tools.utils import Utils
+from nmdc_notebook_tools.data_processing import DataProcessing
 
 
 def test_find_biosample_by_id():
@@ -25,8 +26,11 @@ def test_biosample_by_filter():
 
 def test_biosample_by_attribute():
     biosample = BiosampleSearch()
-    results = biosample.get_record_by_attribute("id", "nmdc:bsm-11-006pnx90")
-    assert len(results) > 0
+    results = biosample.get_record_by_attribute(
+        "id", "nmdc:bsm-11-006pnx90", exact_match=True
+    )
+    print(results)
+    assert len(results) == 1
 
 
 def test_biosample_by_latitude():
@@ -55,18 +59,18 @@ def test_biosample_by_lat_long():
 
 
 def test_biosample_build_filter_1():
-    u = Utils()
+    u = DataProcessing()
     b = BiosampleSearch()
     filter = u.build_filter({"name": "G6R2_NF_20JUN2016"})
-    results = b.biosample_by_filter(filter)
+    results = b.get_record_by_filter(filter)
     print(results)
-    assert len(results) > 0
+    assert len(results) == 1
 
 
 def test_biosample_build_filter_2():
-    u = Utils()
+    u = DataProcessing()
     b = BiosampleSearch()
     filter = u.build_filter({"name": "G6R2_NF_20JUN2016", "id": "nmdc:bsm-11-006pnx90"})
-    results = b.biosample_by_filter(filter)
+    results = b.get_record_by_filter(filter)
     print(results)
-    assert len(results) < 0
+    assert len(results) == 1

@@ -9,6 +9,13 @@ class DataProcessing:
     def __init__(self):
         pass
 
+    def _string_mongo_list(self, data: list) -> str:
+        """
+        Convert elements in a list to use double quotes instead of single quotes.
+        This is required for mongo queries.
+        """
+        return str(data).replace("'", '"')
+
     def convert_to_df(self, data: list) -> pd.DataFrame:
         """
         Convert a list of dictionaries to a pandas dataframe.
@@ -82,17 +89,24 @@ class DataProcessing:
         merged_df.drop_duplicates(keep="first", inplace=True)
         return merged_df
 
-    def build_filter(self, attributes):
+    def build_filter(self, attributes, exact_match=False):
         """
         Create a MongoDB filter using $regex for each attribute in the input dictionary. For nested attributes, use dot notation.
 
         Parameters:
-        attributes (dict): Dictionary of attribute names and their corresponding values to match using regex.
-            Example: {"name": "example", "description": "example", "geo_loc_name": "example"}
+            attributes (dict): Dictionary of attribute names and their corresponding values to match using regex.
+                Example: {"name": "example", "description": "example", "geo_loc_name": "example"}
+            exact_match: bool
+                This var is used to determine if the inputted attribute value is an exact match or a partial match. Default is False, meaning the user does not need to input an exact match.
+                Under the hood this is used to determine if the inputted attribute value should be wrapped in a regex expression.
         Returns:
         dict: A MongoDB filter dictionary.
         """
         filter_dict = {}
-        for attribute_name, attribute_value in attributes.items():
-            filter_dict[attribute_name] = {"$regex": attribute_value}
-        return self.string_mongo_list(filter_dict)
+        if exact_match:
+            for attribute_name, attribute_value in attributes.items():
+                filter_dict[attribute_name] = attribute_value
+        else:
+            for attribute_name, attribute_value in attributes.items():
+                filter_dict[attribute_name] = {"$regex": attribute_value}
+        return self._string_mongo_list(filter_dict)
